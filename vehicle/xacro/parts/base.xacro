@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="base_macro"
+               params="base parent_link
+                       x y z roll pitch yaw">
+    <joint name="${base}_joint" type="fixed">
+      <parent link="${parent_link}"/>
+      <child  link="${base}_link"/>
+      <origin xyz="0.0  0.0  0.0" rpy="0.0  0.0  0.0"/>
+    </joint>
+
+    <xacro:property name="MESH_FILE" value="package://vehicle/xacro/meshes/AIF_body.dae"/>
+    <link name="${base}_link">
+      <visual>
+        <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${yaw}"/>
+        <geometry>
+          <mesh filename="${MESH_FILE}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${yaw}"/>
+        <geometry>
+          <mesh filename="${MESH_FILE}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${yaw}"/>
+        <mass value="30"/>
+        <inertia ixx="1.69600" ixy="0.000" ixz="0.000" iyy="2.00000" iyz="0.000" izz="2.89600"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+</robot>

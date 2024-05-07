@@ -1,0 +1,26 @@
+sensing:
+  zedx:
+    left_image:
+      undistorted: "/aiformula_sensing/zed_node/left_image/undistorted"
+    right_image:
+      undistorted: "/aiformula_sensing/zed_node/right_image/undistorted"
+    imu: "/aiformula_sensing/zed_node/imu"
+  input_can_data: "/aiformula_sensing/vehicle_info"
+  vectornav:
+    imu: "/aiformula_sensing/vectornav/imu"
+  odometry:
+    gyro: "/aiformula_sensing/gyro_odometry_publisher/odom"
+    wheel: "/aiformula_sensing/wheel_odometry_publisher/odom"
+
+# perception:
+
+control:
+  game_pad: "/aiformula_control/joy_node/joy"
+  speed_command:
+    game_pad: "/aiformula_control/game_pad/cmd_vel"
+    handle_controller: "/aiformula_control/handle_controller/cmd_vel"
+  output_can_data: "/aiformula_control/motor_controller/reference_signal"
+
+# planning:
+
+# visualization:

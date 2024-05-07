@@ -1,0 +1,42 @@
+/**:
+  ros__parameters:
+    axis_linear:
+      x: 1  # L-Stick Vertical
+    scale_linear:
+      x: 1.5 # [m/s]  
+    scale_linear_turbo:
+      x: 2.7 # [m/s]
+
+    axis_angular:
+      yaw: 3  # R-Stick Horizontal
+    scale_angular:
+      yaw: 2.0  # [rad/s]
+
+    enable_button: 6        # L2
+    enable_turbo_button: 4  # L1
+
+
+# Button List ===============================================
+#  0: Cross
+#  1: Circle
+#  2: Triangle
+#  3: Square
+#  4: L1
+#  5: R1
+#  6: L2
+#  7: R2
+#  8: SHARE
+#  9: OPTION
+# 10: PS
+# 11: L3
+# 12: R3
+
+# Axis List =================================================
+#  0: L-Stick Horizontal (Left: 1.0, Right: -1.0)
+#  1: L-Stick Vertical   (Up  : 1.0, Down : -1.0)
+#  2: L2 Trigger         (Natural: 1.0, Full Throttle: -1.0)
+#  3: R-Stick Horizontal (Left: 1.0, Right: -1.0)
+#  4: R-Stick Vertical   (Up  : 1.0, Down : -1.0)
+#  5: R2 Trigger         (Natural: 1.0, Full Throttle: -1.0)
+#  6: Cross-key          (Left: 1.0, Right: -1.0)
+#  7: Cross-key          (Up  : 1.0, Down : -1.0)
