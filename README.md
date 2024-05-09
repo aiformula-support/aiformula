@@ -28,14 +28,14 @@ Functions to be provided in this package:
 Clone this repository and build:\
 **Note:** This package contains submodules. If the build of a submodule fails, please refer to the original packages (linked above).
   ```bash
-  mkdir -p ~/ros2_ws/src/ # create your workspace if it does not exist
-  cd ~/ros2_ws/src/ #use your current ros2 workspace folder
+  mkdir -p ~/workspace/ros2_ws/src/ # create your workspace if it does not exist
+  cd ~/workspace/ros2_ws/src/ #use your current ros2 workspace folder
   git clone --recursive https://github.com/aiformula-support/aiformula.git
-  sed -i 's/tf2_geometry_msgs\.hpp/tf2_geometry_msgs.h/g' ~/ros2_ws/src/aiformula/sensing/vectornav/vectornav/src/vn_sensor_msgs.cc
+  sed -i 's/tf2_geometry_msgs\.hpp/tf2_geometry_msgs.h/g' ~/workspace/ros2_ws/src/aiformula/sensing/vectornav/vectornav/src/vn_sensor_msgs.cc
   git clone https://github.com/autowarefoundation/ros2_socketcan.git
   cd ..
   colcon build --symlink-install  # build the workspace
-  source ~/ros2_ws/install/local_setup.bash
+  source ~/workspace/ros2_ws/install/local_setup.bash
   ```
 
 * **Docker Environment:**\
