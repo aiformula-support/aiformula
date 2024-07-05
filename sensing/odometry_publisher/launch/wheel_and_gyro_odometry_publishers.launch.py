@@ -73,7 +73,7 @@ def generate_launch_description():
                         "vehicle_frame_id": FRAME_IDS["base_footprint"] + "_gyro_odometry",
                     }],
         remappings=[
-            ("sub_imu", TOPIC_NAMES["sensing"]["vectornav"]["imu"]),
+            ("sub_imu", TOPIC_NAMES["sensing"]["zedx"]["imu"]),
             ("sub_can", TOPIC_NAMES["sensing"]["input_can_data"]),
             ("pub_odometry", TOPIC_NAMES["sensing"]["odometry"]["gyro"]),
         ],
@@ -82,7 +82,7 @@ def generate_launch_description():
         cmd=[
             "ros2 bag play",
             " --topics ",
-            TOPIC_NAMES["sensing"]["vectornav"]["imu"],
+            TOPIC_NAMES["sensing"]["zedx"]["imu"],
             TOPIC_NAMES["sensing"]["input_can_data"],
             " -r ",
             LaunchConfiguration("rosbag_play_speed"),

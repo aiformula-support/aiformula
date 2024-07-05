@@ -1,5 +1,5 @@
 /**:
   ros__parameters:
     # Can measurement cycle is 10 msec
-    # Imu measurement cycle is 50 msec
+    # Imu measurement cycle is 6.13 msec
     publish_timer_loop_duration: 10 # [msec]
