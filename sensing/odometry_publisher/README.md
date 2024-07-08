@@ -25,7 +25,7 @@ $ ros2 launch odometry_publisher gyro_odometry_publisher.launch.py
 
 - `gyro_odometry_publisher`
     - Subscribe
-        - `/aiformula_sensing/zedx/imu`
+        - `/aiformula_sensing/zed_node/imu`
         - `/aiformula_sensing/can/vehicle_info`
     - Publish
         - `/aiformula_sensing/gyro_odometry_publisher/odom`
