@@ -65,6 +65,11 @@ def generate_launch_description():
         launch_arguments={
             "use_rviz": "true",
         }.items(),
+    rear_potentiometer = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("rear_potentiometer"),
+                     "launch/rear_potentiometer.launch.py"),
+        ),
     )
 
     return LaunchDescription([
@@ -76,4 +81,5 @@ def generate_launch_description():
         motor_controller,
         can_receiver_and_sender,
         gyro_odometry_publisher,
+        rear_potentiometer,
     ])

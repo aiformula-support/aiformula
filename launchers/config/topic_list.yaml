@@ -11,6 +11,7 @@ sensing:
   odometry:
     gyro: "/aiformula_sensing/gyro_odometry_publisher/odom"
     wheel: "/aiformula_sensing/wheel_odometry_publisher/odom"
+  rear_potentiometer: "/aiformula_sensing/rear_potentiometer/yaw"
 
 # perception:
 

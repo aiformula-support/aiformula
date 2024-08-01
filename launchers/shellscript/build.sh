@@ -9,6 +9,7 @@ TARGET_PACKEGES=(
 
     # sensing
     odometry_publisher
+    rear_potentiometer
     zed_wrapper
 
     # control
