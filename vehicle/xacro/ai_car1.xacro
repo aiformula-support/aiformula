@@ -54,7 +54,7 @@
   <xacro:caster_back_joint_macro
     caster_back="${CASTER_BACK}" parent="${BASE}"
     x="-0.76" y="0.0" z="${CASTER_RADIUS}"
-    roll="${90.0*D2R}" pitch="0.0" yaw="${90.0*D2R}"/>
+    roll="0.0" pitch="0.0" yaw="0.0"/>
   <xacro:caster_back_link_macro
     caster_back="${CASTER_BACK}"
     x="0.0" y="0.0" z="0.0"
