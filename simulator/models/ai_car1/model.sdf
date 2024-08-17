@@ -78,8 +78,8 @@
         <surface>
           <friction>
             <ode>
-              <mu>1.0</mu>
-              <mu2>1.0</mu2>
+              <mu>0.7</mu>
+              <mu2>0.7</mu2>
               <fdir1>0 0 0</fdir1>
               <slip1>0.0</slip1>
               <slip2>0.0</slip2>
@@ -143,8 +143,8 @@
         <surface>
           <friction>
             <ode>
-              <mu>1.0</mu>
-              <mu2>1.0</mu2>
+              <mu>0.7</mu>
+              <mu2>0.7</mu2>
               <fdir1>0 0 0</fdir1>
               <slip1>0.0</slip1>
               <slip2>0.0</slip2>
@@ -209,8 +209,8 @@
         <surface>
           <friction>
             <ode>
-              <mu>1.0</mu>
-              <mu2>1.0</mu2>
+              <mu>0.7</mu>
+              <mu2>0.7</mu2>
               <fdir1>0 0 0</fdir1>
               <slip1>0.0</slip1>
               <slip2>0.0</slip2>
@@ -397,7 +397,7 @@
       <wheel_diameter>0.30</wheel_diameter>
 
       <!-- limits -->
-      <max_wheel_torque>10</max_wheel_torque>
+      <max_wheel_torque>9.6</max_wheel_torque>
       <max_wheel_acceleration>1.0</max_wheel_acceleration>
 
       <command_topic>cmd_vel</command_topic>
