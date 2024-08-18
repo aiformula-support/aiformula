@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<robot name="ai_car1" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="parts/base.xacro"/>
+  <xacro:include filename="parts/wheel_macro.xacro"/>
+  <xacro:include filename="parts/caster_trail_macro.xacro"/>
+  <xacro:include filename="parts/zed_macro.xacro"/>
+
+  <xacro:property name="PI" value="3.1415926"/>
+  <xacro:property name="D2R" value="${PI/180}"/>
+  <xacro:property name="WHEEL_RADIUS" value="0.12"/>
+  <xacro:property name="CASTER_RADIUS" value="0.10"/>
+
+  <xacro:property name="BASE_FOOTPRINT" value="base_footprint"/>
+  <xacro:property name="BASE" value="base"/>
+  <xacro:property name="ZEDX" value="zed"/>
+  <xacro:property name="WHEEL_LEFT" value="wheel_left"/>
+  <xacro:property name="WHEEL_RIGHT" value="wheel_right"/>
+  <xacro:property name="CASTER_BACK" value="caster_back"/>
+
+  <xacro:property name="ZED_SERIAL_NUMBER" value="SN48442725"/>
+
+  <!-- base_footprint -->
+  <link name="${BASE_FOOTPRINT}"/>
+
+  <!-- base -->
+  <xacro:base_macro
+    base="${BASE}" parent_link="${BASE_FOOTPRINT}"
+    x="0.0" y="0.0" z="${WHEEL_RADIUS}"
+    roll="0.0" pitch="0.0" yaw="${180.0*D2R}"/>
+
+  <!-- zedx -->
+  <xacro:zed_macro
+    camera="${ZEDX}" parent="${BASE}" zed_serial_number="${ZED_SERIAL_NUMBER}"/>
+
+  <!-- wheel -->
+  <xacro:wheel_joint_macro
+    wheel="${WHEEL_LEFT}" parent="${BASE}"
+    x="0.0" y="0.3" z="${WHEEL_RADIUS}"
+    roll="${90.0*D2R}" pitch="0.0" yaw="${90.0*D2R}"/>
+  <xacro:wheel_link_macro
+    wheel="${WHEEL_LEFT}"
+    x="0.0" y="0.0" z="0.0"
+    roll="0.0" pitch="0.0" yaw="0.0"/>
+  <xacro:wheel_joint_macro
+    wheel="${WHEEL_RIGHT}" parent="${BASE}"
+    x="0.0" y="-0.3" z="${WHEEL_RADIUS}"
+    roll="${90.0*D2R}" pitch="0.0" yaw="${90.0*D2R}"/>
+  <xacro:wheel_link_macro
+    wheel="${WHEEL_RIGHT}"
+    x="0.0" y="0.0" z="0.0"
+    roll="0.0" pitch="0.0" yaw="0.0"/>
+
+  <!-- caster_back -->
+  <xacro:caster_back_joint_macro
+    caster_back="${CASTER_BACK}" parent="${BASE}"
+    x="-0.76" y="0.0" z="${CASTER_RADIUS}"
+    roll="0.0" pitch="0.0" yaw="0.0"/>
+  <xacro:caster_back_link_macro
+    caster_back="${CASTER_BACK}"
+    x="0.0" y="0.0" z="0.0"
+    roll="0.0" pitch="0.0" yaw="0.0"/>
+</robot>

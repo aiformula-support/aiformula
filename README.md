@@ -60,3 +60,15 @@ To start all nodes of aiformula:\
 ```bash
 ros2 launch launchers all_nodes.launch.py
 ```
+
+**Under developping**
+
+Original simulation environment
+```
+ros2 launch simulator gazebo_simulator.launch.py
+```
+
+Simulation environment considering caster trail
+```
+ros2 launch simulator gazebo_simulator_caster_trail.launch.py
+```
