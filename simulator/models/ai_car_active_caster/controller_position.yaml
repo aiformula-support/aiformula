@@ -1,0 +1,11 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 30  # Hz
+
+    position_controller:
+      type: position_controllers/JointGroupPositionController
+
+position_controller:
+  ros__parameters:
+    joints:
+      - caster_back_steering_joint
