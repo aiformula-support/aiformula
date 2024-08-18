@@ -28,7 +28,7 @@ def get_robot_state_publisher(
             package="robot_state_publisher",
             executable="robot_state_publisher",
             name="robot_state_publisher",
-            namespace="/aiformula_sensing",
+            #namespace="/aiformula_sensing",
             parameters=[{
                 "robot_description": robot_description,
                 "use_sim_time": use_sim_time_lc,
