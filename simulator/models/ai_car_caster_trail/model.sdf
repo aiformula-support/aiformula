@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
-  <model name="ai_car1">  
+  <model name="ai_car_caster_trail">  
   <pose>0 0 0 0 0 0</pose>
 
     <link name="base_footprint"/>
@@ -175,10 +175,30 @@
 
 <!-- wheel caster -->
 
-   <joint name='wheel_caster_joint' type="revolute">
+   <joint name='wheel_caster_steering_joint' type="revolute">
       <parent>base_link</parent>
-      <child>wheel_caster_link</child>
+      <child>wheel_caster_steering_link</child>
       <pose>-0.8 0 -0.02 1.57 0 1.57</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+        </limit>
+      </axis>
+   </joint>
+
+   <link name="wheel_caster_steering_link">
+      <inertial>
+        <pose>-0.8 0 -0.02 1.57 0 1.57</pose>
+        <mass>1.0</mass>
+      </inertial>
+  </link>
+
+   <joint name='wheel_caster_joint' type="revolute">
+      <parent>wheel_caster_steering_link</parent>
+      <child>wheel_caster_link</child>
+      <pose>-1.0 0 -0.02 1.57 0 1.57</pose>
       <axis>
         <xyz>1 0 0</xyz>
       </axis>
@@ -186,7 +206,7 @@
 
    <link name="wheel_caster_link">
       <inertial>
-        <pose>-0.8 0 -0.02 1.57 0 1.57</pose>
+        <pose>-1.0 0 -0.02 1.57 0 1.57</pose>
         <inertia>
           <ixx>0.04778</ixx>
           <ixy>0</ixy>
@@ -199,7 +219,7 @@
       </inertial>
 
       <collision name="wheel_caster_collision">
-        <pose>-0.8 0 -0.02 1.57 0 1.57</pose>
+        <pose>-1.0 0 -0.02 1.57 0 1.57</pose>
         <geometry>
           <mesh>
             <uri>model://ai_car1/meshes/tire.dae</uri>
@@ -209,8 +229,8 @@
         <surface>
           <friction>
             <ode>
-              <mu>0.001</mu>
-              <mu2>0.001</mu2>
+              <mu>0.7</mu>
+              <mu2>0.7</mu2>
               <fdir1>0 0 0</fdir1>
               <slip1>0.0</slip1>
               <slip2>0.0</slip2>
@@ -230,7 +250,7 @@
       </collision>
 
       <visual name="wheel_caster_visual">
-        <pose>-0.8 0 -0.02 1.57 0 1.57</pose>
+        <pose>-1.0 0 -0.02 1.57 0 1.57</pose>
         <geometry>
           <mesh>
             <uri>model://ai_car1/meshes/tire.dae</uri>
@@ -397,7 +417,7 @@
       <wheel_diameter>0.30</wheel_diameter>
 
       <!-- limits -->
-      <max_wheel_torque>50</max_wheel_torque>
+      <max_wheel_torque>9.6</max_wheel_torque>
       <max_wheel_acceleration>1.0</max_wheel_acceleration>
 
       <command_topic>cmd_vel</command_topic>

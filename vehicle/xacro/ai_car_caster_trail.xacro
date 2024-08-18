@@ -2,7 +2,7 @@
 <robot name="ai_car1" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:include filename="parts/base.xacro"/>
   <xacro:include filename="parts/wheel_macro.xacro"/>
-  <xacro:include filename="parts/caster_back_macro.xacro"/>
+  <xacro:include filename="parts/caster_trail_macro.xacro"/>
   <xacro:include filename="parts/zed_macro.xacro"/>
 
   <xacro:property name="PI" value="3.1415926"/>
@@ -54,7 +54,7 @@
   <xacro:caster_back_joint_macro
     caster_back="${CASTER_BACK}" parent="${BASE}"
     x="-0.76" y="0.0" z="${CASTER_RADIUS}"
-    roll="${90.0*D2R}" pitch="0.0" yaw="${90.0*D2R}"/>
+    roll="0.0" pitch="0.0" yaw="0.0"/>
   <xacro:caster_back_link_macro
     caster_back="${CASTER_BACK}"
     x="0.0" y="0.0" z="0.0"
