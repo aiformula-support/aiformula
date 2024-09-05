@@ -7,6 +7,9 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     VEHICLE_NAME = "ai_car1"
+    CAMERA_NAME = "zedx"
+    CAMERA_SN = "SN48442725"
+    CAMERA_RESOLUTION = "SVGA"
 
     tf_static_publisher = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -30,6 +33,17 @@ def generate_launch_description():
             osp.join(get_package_share_directory("launchers"),
                      "launch/vectornav.launch.py"),
         ),
+    )
+    # --- Perception --- #
+    lane_line_publisher = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("lane_line_publisher"), "launch/lane_line_publisher.launch.py"),
+        ),
+        launch_arguments={
+            "camera_name": CAMERA_NAME,
+            "camera_sn": CAMERA_SN,
+            "camera_resolution": CAMERA_RESOLUTION,
+        }.items(),
     )
     # --- GamePad --- #
     joy_node = IncludeLaunchDescription(
@@ -65,6 +79,8 @@ def generate_launch_description():
         launch_arguments={
             "use_rviz": "true",
         }.items(),
+    )
+
     rear_potentiometer = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             osp.join(get_package_share_directory("rear_potentiometer"),
@@ -76,6 +92,7 @@ def generate_launch_description():
         tf_static_publisher,
         zed_node,
         vectornav,
+        lane_line_publisher,
         joy_node,
         teleop_node,
         motor_controller,

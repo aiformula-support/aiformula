@@ -12,6 +12,9 @@ TARGET_PACKEGES=(
     rear_potentiometer
     zed_wrapper
 
+    # perception
+    lane_line_publisher
+
     # control
     motor_controller
 

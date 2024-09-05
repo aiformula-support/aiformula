@@ -1,0 +1,14 @@
+/**:
+  ros__parameters:
+    lane_line_publisher:
+      queue_size: 10    # queue size for subscribers and publishers
+      roi:              # interest region in the vehicle frame [m]
+        xmin: 0.0
+        xmax: 20.0
+        ymin: -25.0
+        ymax: 25.0
+      spacing: 1.0      # spacing between published lane line points [m]
+    
+    lane_pixel_finder:
+      min_area: 100     # minimum connected component area for mask noise removal [pix^2]
+      tolerance: 10     # tolerance to relax lane pixel search bounds [pix]

@@ -8,12 +8,20 @@ sensing:
   input_can_data: "/aiformula_sensing/vehicle_info"
   vectornav:
     imu: "/aiformula_sensing/vectornav/imu"
+    gnss: "/aiformula_sensing/vectornav/gnss"
   odometry:
     gyro: "/aiformula_sensing/gyro_odometry_publisher/odom"
     wheel: "/aiformula_sensing/wheel_odometry_publisher/odom"
+    gnss: "/aiformula_sensing/gnss_odometry_publisher/odom"
   rear_potentiometer: "/aiformula_sensing/rear_potentiometer/yaw"
 
-# perception:
+perception:
+  mask_image: "/aiformula_perception/road_detector/mask_image"
+  annotated_mask_image: "/aiformula_perception/lane_line_publisher/annotated_mask_image"
+  lane_lines:
+    left: "/aiformula_perception/lane_line_publisher/lane_lines/left"
+    right: "/aiformula_perception/lane_line_publisher/lane_lines/right"
+    center: "/aiformula_perception/lane_line_publisher/lane_lines/center"
 
 control:
   game_pad: "/aiformula_control/joy_node/joy"
@@ -24,4 +32,6 @@ control:
 
 # planning:
 
-# visualization:
+visualization:
+  annotated_mask_image: "/aiformula_visualization/road_detector/annotated_mask_image"
+
