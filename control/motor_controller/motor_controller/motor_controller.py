@@ -27,15 +27,15 @@ class MotorController(Node):
         self.can_pub = self.create_publisher(Frame, 'pub_can', buffer_size)
         self.publish_timer = self.create_timer(publish_timer_loop_duration, self.publish_canframe_callback)
         self.frame_msg = Frame()
+        self.frame_msg.header.frame_id = "can0"        # Default can0
+        self.frame_msg.id = 0x210                      # MotorControler CAN ID : 0x210
+        self.frame_msg.dlc = 8                         # Data length
 
     def twist_callback(self, msg):
         rpm = self.toRefRPM(msg.linear.x, msg.angular.z)
         cmd_right = self.toCanCmd(rpm[0])
         cmd_left = self.toCanCmd(rpm[1])
         can_data = cmd_right + cmd_left
-        self.frame_msg.header.frame_id = "can0"        # Default can0
-        self.frame_msg.id = 0x210                      # MotorControler CAN ID : 0x210
-        self.frame_msg.dlc = 8                         # Data length
         self.frame_msg.data = can_data
 
     def publish_canframe_callback(self):

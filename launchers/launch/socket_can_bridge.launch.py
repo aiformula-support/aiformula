@@ -16,9 +16,9 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "interface", default_value="can0"),
         DeclareLaunchArgument(
-            "receiver_interval_sec", default_value="0.01"),
+            "receiver_interval_sec", default_value="0.1"),
         DeclareLaunchArgument(
-            "sender_timeout_sec", default_value="0.01"),
+            "sender_timeout_sec", default_value="0.1"),
         DeclareLaunchArgument(
             "enable_can_fd", default_value="false"),
     )
