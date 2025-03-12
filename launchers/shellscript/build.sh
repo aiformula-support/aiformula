@@ -18,9 +18,13 @@ TARGET_PACKEGES=(
     # control
     motor_controller
 
+    # remote control
+    image_compressor
+
     # external repository
     vectornav
     ros2_socketcan
+    twist_mux
 )
 
 echo "Build Targets:"
