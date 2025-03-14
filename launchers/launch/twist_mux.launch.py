@@ -86,8 +86,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         *launch_args,
-        # twist_mux,
-        # twist_marker,
+        twist_mux,
+        twist_marker,
         rviz2,
         runtime_monitor,
     ])
