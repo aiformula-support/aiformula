@@ -45,19 +45,30 @@ def generate_launch_description():
             "camera_resolution": CAMERA_RESOLUTION,
         }.items(),
     )
-    # --- GamePad --- #
-    joy_node = IncludeLaunchDescription(
+    # --- Command input from gamepad --- #
+    gamepad_joy = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             osp.join(get_package_share_directory("launchers"),
-                     "launch/joy.launch.py"),
+                     "launch/gamepad_joy.launch.py"),
         ),
     )
-    # --- Output velocity and angular velocity --- #
-    teleop_node = IncludeLaunchDescription(
+    # --- Output velocity and angular velocity from gamepad --- #
+    gamepad_teleop = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             osp.join(get_package_share_directory("launchers"),
-                     "launch/teleop.launch.py"),
+                     "launch/gamepad_teleop.launch.py"),
         ),
+    )
+    # --- Multiplex velocities --- #
+    twist_mux = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("launchers"),
+                     "launch/twist_mux.launch.py"),
+        ),
+        launch_arguments={
+            "use_rviz": "false",
+            "use_runtime_monitor": "false",
+        }.items(),
     )
     motor_controller = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -87,16 +98,25 @@ def generate_launch_description():
                      "launch/rear_potentiometer.launch.py"),
         ),
     )
+    # --- Compress Zed Image for AI Formula Pilot --- #
+    image_compressor = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("image_compressor"),
+                     "launch/image_compressor.launch.py"),
+        ),
+    )
 
     return LaunchDescription([
         tf_static_publisher,
         zed_node,
         vectornav,
         lane_line_publisher,
-        joy_node,
-        teleop_node,
+        gamepad_joy,
+        gamepad_teleop,
+        twist_mux,
         motor_controller,
         can_receiver_and_sender,
         gyro_odometry_publisher,
         rear_potentiometer,
+        image_compressor,
     ])

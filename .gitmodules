@@ -5,3 +5,6 @@
 [submodule "sensing/zed-ros2-wrapper"]
 	path = sensing/zed-ros2-wrapper
 	url = https://github.com/stereolabs/zed-ros2-wrapper.git
+[submodule "control/twist_mux"]
+	path = control/twist_mux
+	url = https://github.com/ros-teleop/twist_mux.git

@@ -8,14 +8,14 @@ This package manages launch files each node\
 | Frame id   | /config/frame_id_list.yaml |
 
 ### Launch Files
-- `joy.launch.py`
+- `gamepad_joy.launch.py`
   - Output: `gamepad command`
 
 - `socket_can_bridge.launch.py`
   - Input: `speed command`, Output: `wheel rotation count`
 
-- `teleop.launch.py`
-  - Input: `gamepad command`, Output: `speed command`
+- `gamepad_teleop.launch.py`
+  - Input: `gamepad command`, Output: `speed command (from gamepad)`
 
 - `vectornav.launch.py`
   - Output: `Imu`

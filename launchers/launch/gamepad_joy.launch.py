@@ -11,19 +11,19 @@ def generate_launch_description():
     _, TOPIC_NAMES = get_frame_ids_and_topic_names()
 
     ROS_PARAM_CONFIG = (
-        osp.join(get_package_share_directory("launchers"), "config", "joy.yaml"),
+        osp.join(get_package_share_directory("launchers"), "config", "gamepad_joy.yaml"),
     )
-    joy_node = Node(
+    gamepad_joy = Node(
         package=PACKAGE_NAME,
         executable=NODE_NAME,
         name=NODE_NAME,
-        namespace="/aiformula_control",
+        namespace="/aiformula_control/gamepad",
         parameters=[*ROS_PARAM_CONFIG],
         remappings=[
-            ("joy", TOPIC_NAMES["control"]["game_pad"]),
+            ("joy", TOPIC_NAMES["control"]["joy"]["gamepad"]),
         ],
     )
 
     return LaunchDescription([
-        joy_node,
+        gamepad_joy,
     ])

@@ -7,6 +7,7 @@ install(
     DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}/config
         ${CMAKE_CURRENT_SOURCE_DIR}/launch
+        ${CMAKE_CURRENT_SOURCE_DIR}/rviz
     DESTINATION share/${PROJECT_NAME}
 )
 

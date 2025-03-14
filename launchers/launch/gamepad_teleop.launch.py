@@ -14,7 +14,7 @@ def generate_launch_description():
 
     launch_args = (
         DeclareLaunchArgument(
-            "game_pad",
+            "gamepad",
             default_value="dualshock4",
             description="GamePad type.",
         ),
@@ -22,25 +22,25 @@ def generate_launch_description():
             "button_layout_config",
             default_value=[
                 osp.join(get_package_share_directory("launchers"),
-                         "config/gamepad", ""), LaunchConfiguration("game_pad"), ".yaml"
+                         "config/gamepad", ""), LaunchConfiguration("gamepad"), ".yaml"
             ],
             description="GamePad button layout configuration file.",
         ),
     )
 
-    teleop_node = Node(
+    gamepad_teleop = Node(
         package=PACKAGE_NAME,
         executable=NODE_NAME,
         name=NODE_NAME,
-        namespace="/aiformula_control",
+        namespace="/aiformula_control/gamepad",
         parameters=[LaunchConfiguration("button_layout_config")],
         remappings=[
-            ("joy", TOPIC_NAMES["control"]["game_pad"]),
-            ("cmd_vel", TOPIC_NAMES["control"]["speed_command"]["game_pad"]),
+            ("joy", TOPIC_NAMES["control"]["joy"]["gamepad"]),
+            ("cmd_vel", TOPIC_NAMES["control"]["speed_command"]["gamepad"]),
         ],
     )
 
     return LaunchDescription([
         *launch_args,
-        teleop_node,
+        gamepad_teleop,
     ])
