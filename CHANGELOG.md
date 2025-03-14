@@ -43,4 +43,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Core features implemented.
 
 
-[v1.4.0]: https://github.com/honda-hgrx-idcs/EC7D_AIformula_Control/tree/4c860512b23689f2473e22b0016aaa83f31c049c
+[v1.4.0]: https://github.com/aiformula-support/aiformula/tree/d3881565ccc18cf1f813c0dba92c18957b00b548
