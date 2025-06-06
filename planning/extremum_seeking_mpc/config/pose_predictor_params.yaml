@@ -1,0 +1,3 @@
+/**:
+  ros__parameters:
+    curvature_radius_maximum: 1000. #[m]

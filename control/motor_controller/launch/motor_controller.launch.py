@@ -21,7 +21,7 @@ def generate_launch_description():
     )
 
     ROS_PARAM_CONFIG = (
-        osp.join(get_package_share_directory("vehicle"), "config", "wheel.yaml"),
+        osp.join(get_package_share_directory("sample_vehicle"), "config", "wheel.yaml"),
         osp.join(PACKAGE_DIR, "config", "motor_controller.yaml"),
     )
     motor_controller = Node(

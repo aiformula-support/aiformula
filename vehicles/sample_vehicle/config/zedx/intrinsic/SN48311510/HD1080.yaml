@@ -1,0 +1,6 @@
+/**:
+  ros__parameters:
+    zedx:
+      size: { width: 1920, height: 1080 } # [pix]
+      focal_length: { x: 739.676, y: 739.167 } # [pix]
+      center_point: { x: 955.035, y: 559.771 } # [pix]

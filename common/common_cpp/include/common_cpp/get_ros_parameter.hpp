@@ -4,7 +4,15 @@
 // ROS
 #include <rclcpp/rclcpp.hpp>
 
+// Original
+#include "common_cpp/util.hpp"
+
 namespace aiformula {
+
+class ParameterNotProvidedException : public std::runtime_error {
+public:
+    ParameterNotProvidedException(const std::string& message) : std::runtime_error(message) {}
+};
 
 /*
 Since `as_xxx()` changes depending on the type of template arguments,
@@ -13,51 +21,52 @@ each implementation must be defined separately.
 
 // Declaration ==========================================================================================
 template <typename T>
-T getParameterAsType(rclcpp::Node* const node_ptr, const std::string& param_name);
+T getParameterAsType(const rclcpp::Parameter param);
 
 // Implementation =======================================================================================
 template <>
-inline bool getParameterAsType<bool>(rclcpp::Node* const node_ptr, const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_bool();
+inline bool getParameterAsType<bool>(const rclcpp::Parameter param) {
+    return param.as_bool();
 }
 
 template <>
-inline int getParameterAsType<int>(rclcpp::Node* const node_ptr, const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_int();
+inline int getParameterAsType<int>(const rclcpp::Parameter param) {
+    return param.as_int();
 }
 
 template <>
-inline double getParameterAsType<double>(rclcpp::Node* const node_ptr, const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_double();
+inline double getParameterAsType<double>(const rclcpp::Parameter param) {
+    return param.as_double();
 }
 
 template <>
-inline std::string getParameterAsType<std::string>(rclcpp::Node* const node_ptr, const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_string();
+inline std::string getParameterAsType<std::string>(const rclcpp::Parameter param) {
+    return param.as_string();
 }
 
 template <>
-inline std::vector<bool> getParameterAsType<std::vector<bool>>(rclcpp::Node* const node_ptr,
-                                                               const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_bool_array();
+inline std::vector<uint8_t> getParameterAsType<std::vector<uint8_t>>(const rclcpp::Parameter param) {
+    return param.as_byte_array();
 }
 
 template <>
-inline std::vector<long int> getParameterAsType<std::vector<long int>>(rclcpp::Node* const node_ptr,
-                                                                       const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_integer_array();
+inline std::vector<bool> getParameterAsType<std::vector<bool>>(const rclcpp::Parameter param) {
+    return param.as_bool_array();
 }
 
 template <>
-inline std::vector<double> getParameterAsType<std::vector<double>>(rclcpp::Node* const node_ptr,
-                                                                   const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_double_array();
+inline std::vector<long int> getParameterAsType<std::vector<long int>>(const rclcpp::Parameter param) {
+    return param.as_integer_array();
 }
 
 template <>
-inline std::vector<std::string> getParameterAsType<std::vector<std::string>>(rclcpp::Node* const node_ptr,
-                                                                             const std::string& param_name) {
-    return node_ptr->get_parameter(param_name).as_string_array();
+inline std::vector<double> getParameterAsType<std::vector<double>>(const rclcpp::Parameter param) {
+    return param.as_double_array();
+}
+
+template <>
+inline std::vector<std::string> getParameterAsType<std::vector<std::string>>(const rclcpp::Parameter param) {
+    return param.as_string_array();
 }
 
 /**
@@ -72,17 +81,15 @@ inline std::vector<std::string> getParameterAsType<std::vector<std::string>>(rcl
  */
 template <typename T>
 T getRosParameter(rclcpp::Node* const node_ptr, const std::string& param_name) {
-    if (!node_ptr->has_parameter(param_name)) {
-        node_ptr->declare_parameter(param_name);
-    }
     try {
-        return getParameterAsType<T>(node_ptr, param_name);
-    } catch (const rclcpp::exceptions::ParameterNotDeclaredException& e) {
-        RCLCPP_ERROR(node_ptr->get_logger(), "Parameter '%s' is not declared", e.what());
-        rclcpp::shutdown();
-        exit(1);
-    } catch (const rclcpp::ParameterTypeException& e) {
-        RCLCPP_ERROR(node_ptr->get_logger(), "Parameter '%s' has an incorrect type: %s", param_name.c_str(), e.what());
+        node_ptr->declare_parameter(param_name, T());
+        const auto param_overrides = node_ptr->get_node_parameters_interface()->get_parameter_overrides();
+        if (param_overrides.find(param_name) == param_overrides.end()) {
+            throw ParameterNotProvidedException("The value for '" + param_name + "' has not been provided");
+        }
+        return getParameterAsType<T>(node_ptr->get_parameter(param_name));
+    } catch (const std::runtime_error& e) {
+        RCLCPP_ERROR(node_ptr->get_logger(), "%s: %s !", toExceptionTypeString(e).c_str(), e.what());
         rclcpp::shutdown();
         exit(1);
     }

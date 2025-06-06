@@ -52,6 +52,26 @@ install(TARGETS gyro_odometry_publisher
     DESTINATION lib/${PROJECT_NAME}
 )
 
+# gnss_odometry_publisher
+add_executable(gnss_odometry_publisher
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/odometry_publisher.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/gnss_odometry_publisher/gnss_odometry_publisher.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/gnss_odometry_publisher/gnss_odometry_publisher_node.cpp
+)
+target_include_directories(gnss_odometry_publisher PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+ament_target_dependencies(gnss_odometry_publisher
+    rclcpp
+    tf2_ros
+    sensor_msgs
+    nav_msgs
+    common_cpp
+)
+install(TARGETS gnss_odometry_publisher
+    DESTINATION lib/${PROJECT_NAME}
+)
+
 install(
     DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}/config

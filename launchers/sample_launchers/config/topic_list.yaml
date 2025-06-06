@@ -1,0 +1,49 @@
+sensing:
+  zedx:
+    left_image:
+      undistorted: "/aiformula_sensing/zed_node/left_image/undistorted"
+    right_image:
+      undistorted: "/aiformula_sensing/zed_node/right_image/undistorted"
+    imu: "/aiformula_sensing/zed_node/imu"
+  input_can_data: "/aiformula_sensing/vehicle_info"
+  vectornav:
+    imu: "/aiformula_sensing/vectornav/imu"
+    gnss: "/aiformula_sensing/vectornav/gnss"
+  odometry:
+    gyro: "/aiformula_sensing/gyro_odometry_publisher/odom"
+    wheel: "/aiformula_sensing/wheel_odometry_publisher/odom"
+    gnss: "/aiformula_sensing/gnss_odometry_publisher/odom"
+  rear_potentiometer: "/aiformula_sensing/rear_potentiometer/yaw"
+
+perception:
+  mask_image: "/aiformula_perception/object_road_detector/mask_image"
+  objects:
+    bounding_box: "/aiformula_perception/object_road_detector/rect"
+    info: "/aiformula_perception/object_publisher/object_info"
+  annotated_mask_image: "/aiformula_perception/lane_line_publisher/annotated_mask_image"
+  lane_lines:
+    left: "/aiformula_perception/lane_line_publisher/lane_lines/left"
+    right: "/aiformula_perception/lane_line_publisher/lane_lines/right"
+    center: "/aiformula_perception/lane_line_publisher/lane_lines/center"
+
+control:
+  joy:
+    gamepad: "/aiformula_control/gamepad/joy"
+    handle_controller: "/aiformula_control/handle_controller/joy"
+  speed_command:
+    gamepad: "/aiformula_control/gamepad/cmd_vel"
+    handle_controller:
+      normal: "/aiformula_control/handle_controller/cmd_vel"
+      coasting: "/aiformula_control/handle_controller/cmd_vel/coasting"
+    mpc: "/aiformula_control/extremum_seeking_mpc/cmd_vel"
+    multiplexed: "/aiformula_control/twist_mux/cmd_vel"
+  twist_mux_lock:
+    all: "/aiformula_control/twist_mux/all/lock"
+    handle_controller: "/aiformula_control/twist_mux/handle_controller/lock"
+    gamepad: "/aiformula_control/twist_mux/gamepad/lock"
+  output_can_data: "/aiformula_control/motor_controller/reference_signal"
+
+visualization:
+  annotated_image: "/aiformula_visualization/object_road_detector/annotated_image"
+  aiformula_pilot: "/aiformula_visualization/zed/left_image/compressed"
+  unfiltered_object: "/aiformula_visualization/object_publisher/unfiltered_object"

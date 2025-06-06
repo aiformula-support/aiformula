@@ -1,0 +1,8 @@
+/**:
+  ros__parameters:
+      max_linear_vel: 3.0           # [m/s]
+      max_linear_vel: 3.0           # [m/s]
+      max_angular_vel: 3.0          # [rad/s]
+      max_linear_acceleration: 1.3  # [m/s^2]
+      drag_exponent: 1.2
+      stopping_vel: 0.1             # [m/s]

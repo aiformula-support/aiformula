@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+    display_full_screen: true  # If true, display the image in full screen.
+
+    # If not in full screen mode
+    target_screen_idx: 0  # Screen index to show when multiple displays are available.
+    window:
+      width_ratio: 0.5  # The ratio of the window width to the screen size.
+                        # The height is determined to maintain the aspect ratio.
+      position_ratio: {x: 0.5, y: 0.5}  # The ratio of the window position to the screen size.
+                                        # 0.0: left/top, 1.0: right/bottom

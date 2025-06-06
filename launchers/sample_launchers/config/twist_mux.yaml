@@ -1,0 +1,45 @@
+# Input topics handled/muxed.
+# For each topic:
+# - name    : name identifier to select the topic (*sub-namespace, see below)
+#   - topic   : input topic of geometry_msgs::Twist type. Set it in `twiist_mux.launch.py`
+#   - timeout : timeout in seconds to start discarding old messages, and use 0.0 speed instead
+#   - priority: priority in the range [0, 255]; the higher the more priority over other topics
+
+/**:
+  ros__parameters:
+    topics:
+      handle_controller:
+        timeout : 0.3  # [sec]
+        priority: 250
+      gamepad:
+        timeout : 0.3  # [sec]
+        priority: 150
+      mpc:
+        timeout : 0.3  # [sec]
+        priority: 50
+      handle_controller_coasting:
+        timeout : 0.3  # [sec]
+        priority: 1
+
+# Locks to stop the twist inputs.
+# For each lock:
+# - topic   : input topic that provides the lock; it must be of type std_msgs::Bool?!!!
+# - timeout : == 0.0 -> not used
+#              > 0.0 -> the lock is supposed to published at a certain frequency in order
+#                       to detect that the publisher is alive; the timeout in seconds allows
+#                       to detect that, and if the publisher dies we will enable the lock
+# - priority: priority in the range [0, 255], so all the topics with priority lower than it
+#             will be stopped/disabled
+    locks:
+      # all:
+      #   timeout : 0.0  # [sec]
+      #   priority: 255
+      # handle_controller:
+      #   timeout : 0.0  # [sec]
+      #   priority: 251
+      gamepad:
+        timeout : 0.0  # [sec]
+        priority: 151
+      # mpc:
+      #   timeout : 0.0  # [sec]
+      #   priority: 51

@@ -71,7 +71,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "camera_sn",
-            default_value="SN48442725",
+            default_value="SN48311510",
             description="camera serial number",
         ),
         DeclareLaunchArgument(

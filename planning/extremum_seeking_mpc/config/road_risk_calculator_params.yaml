@@ -1,0 +1,23 @@
+/**:
+  ros__parameters:
+    road_risk_potential:
+      left_gradient: 0.2
+      right_gradient: 0.2
+      margin: 0.2
+      offset: 1.7
+      gain: 5.
+    
+    road_weight:
+      u: [0., 0.2, 0.4, 0.6, 0.7, 0.9, 1.0] #[m]
+      num_function: 5
+      num_function_coefficients: 3 # ex) maximum_function_order: 2 -> 3 (a * x^2 + b * x + c)
+    
+    road_identification:
+      max_point_length: 50
+      identification_gain: 10
+      forget_vector: [0.99995, 0.99995, 0.98]
+      road_parameter_limit: 0.3
+    
+    road_benefit_function:
+      scale: 1.0
+      covariance: 1.0

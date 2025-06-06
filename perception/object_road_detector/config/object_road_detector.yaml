@@ -1,0 +1,10 @@
+/**:
+  ros__parameters:
+    normalization:
+      mean:
+          [0.485, 0.456, 0.406]
+      standard_deviation:
+          [0.229, 0.224, 0.225]
+          
+    confidence_threshold: 0.80
+    iou_threshold: 0.6

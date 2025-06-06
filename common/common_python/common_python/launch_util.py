@@ -30,7 +30,7 @@ def get_unique_name(name: str) -> str:
 
 
 def get_frame_ids_and_topic_names() -> List[dict]:
-    """Read `launchers/config/{frame_ids.yaml, topic_list.yaml}` and return their dictionaries.
+    """Read `sample_launchers/config/{frame_ids.yaml, topic_list.yaml}` and return their dictionaries.
 
     Returns:
     ----------
@@ -43,16 +43,16 @@ def get_frame_ids_and_topic_names() -> List[dict]:
     >>> FRAME_IDS, _           = get_frame_ids_and_topic_names()
     """
 
-    with open(osp.join(get_package_share_directory("launchers"), "config/topic_list.yaml"), "r") as yml:
+    with open(osp.join(get_package_share_directory("sample_launchers"), "config/topic_list.yaml"), "r") as yml:
         topic_names = yaml.safe_load(yml)
-    with open(osp.join(get_package_share_directory("launchers"), "config/frame_id_list.yaml"), "r") as yml:
+    with open(osp.join(get_package_share_directory("sample_launchers"), "config/frame_id_list.yaml"), "r") as yml:
         frame_ids = yaml.safe_load(yml)
     return frame_ids, topic_names
 
 
 def check_zedx_available_fps(grab_resolution, grab_frame_rate):
 
-    with open(osp.join(get_package_share_directory("vehicle"), "config/zedx/check_fps.yaml"), "r") as yml:
+    with open(osp.join(get_package_share_directory("sample_vehicle"), "config/zedx/check_fps.yaml"), "r") as yml:
         params = yaml.safe_load(yml)
 
     if (grab_resolution == 'HD1200' or grab_resolution == 'HD1080'):

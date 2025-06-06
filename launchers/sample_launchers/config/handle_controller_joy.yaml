@@ -1,0 +1,4 @@
+/**:
+  ros__parameters:
+    deadzone: 0.05         # default: 0.05
+    autorepeat_rate: 20.0  # default: 20.0 Hz

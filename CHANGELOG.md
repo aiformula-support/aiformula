@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.0.0 - 2025-06-05
+### Added
+- `planning/extremum_seeking_mpc`.
+- `object_publisher`.
+
+### Changed
+- Rename `launchers` -> `sample_launchers`.
+- Rename `simulator` -> `sample_simulators`.
+- Rename `vehicle` -> `sample_vehicle`.
+- Update `road_detector` -> `object_road_detector`.
+- Update `all_nodes.launch.py` -> `all_robot_nodes.launch.py`.
 
 ## [v1.4.0] - 2025-03-14
 ### Added

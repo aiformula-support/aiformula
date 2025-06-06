@@ -1,0 +1,6 @@
+<library path="object_info_multi_array_displayer">
+  <class name="ObjectInfoMultiArray" type="rviz_aiformula_plugins::ObjectInfoMultiArrayDisplayer" base_class_type="rviz_common::Display">
+    <description>Displays positions and width of tracked objects from ObjectInfoMultiArray</description>
+    <message_type>aiformula_interfaces/msg/ObjectInfoMultiArray</message_type>
+  </class>
+</library>
