@@ -29,7 +29,6 @@ perception:
 control:
   joy:
     gamepad: "/aiformula_control/gamepad/joy"
-    handle_controller: "/aiformula_control/handle_controller/joy"
   speed_command:
     gamepad: "/aiformula_control/gamepad/cmd_vel"
     handle_controller:

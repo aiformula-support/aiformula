@@ -109,12 +109,6 @@
   history: keep_last
   reliability: best_effort
 
-/aiformula_control/handle_controller/joy:
-  depth: 2
-  durability: volatile
-  history: keep_last
-  reliability: best_effort
-
 /aiformula_control/gamepad/cmd_vel:
   depth: 2
   durability: volatile

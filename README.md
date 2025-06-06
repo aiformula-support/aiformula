@@ -50,7 +50,7 @@ To start docker:
 ### Vehicle setup
 To connect can, and device
 ```bash
-cd ~/ros2_ws/src/aiformula/launchers/shellscript/
+cd ~/ros2_ws/src/aiformula/launchers/sample_launchers/shellscript/
 ./init_sensors.sh
 ```
 
