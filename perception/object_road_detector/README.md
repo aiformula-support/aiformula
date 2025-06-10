@@ -62,6 +62,12 @@ Set up your environment by export the following command.
 export PYTHONPATH=${aiformula}/perception/yolop:$PYTHONPATH
 ```
 
+If you encounter a "No module named 'lib'" error, export the following command.
+
+```sh
+export PYTHONPATH=${aiformula}/perception/yolop/yolop:$PYTHONPATH
+```
+
 ## Running Example:
 
 * To start object road detector
