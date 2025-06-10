@@ -14,7 +14,7 @@
   <xacro:macro name="wheel_link_macro"
                params="wheel
                        x y z roll pitch yaw">
-    <xacro:property name="MESH_FILE" value="package://vehicle/xacro/meshes/tire.dae"/>
+    <xacro:property name="MESH_FILE" value="package://sample_vehicle/xacro/meshes/tire.dae"/>
     <xacro:property name="THICKNESS_SCALE" value="0.05"/>
     <xacro:property name="SIZE_SCALE" value="0.12"/>
     <link name="${wheel}_link">

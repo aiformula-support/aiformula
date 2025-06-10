@@ -11,7 +11,7 @@ Examples:
 """
 
 from argparse import ArgumentParser
-from vehicle.vehicle_util import convert_xacro_to_urdf
+from sample_vehicle.vehicle_util import convert_xacro_to_urdf
 
 if __name__ == "__main__":
 

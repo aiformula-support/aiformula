@@ -9,7 +9,7 @@ from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
 
 from common_python.launch_util import get_frame_ids_and_topic_names
-from vehicle.vehicle_util import get_zed_intrinsic_param_path
+from sample_vehicle.vehicle_util import get_zed_intrinsic_param_path
 
 
 PACKAGE_NAME = "object_publisher"

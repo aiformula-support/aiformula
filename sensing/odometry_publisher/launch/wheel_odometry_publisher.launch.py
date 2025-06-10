@@ -38,7 +38,7 @@ def generate_launch_description():
     )
 
     ROS_PARAM_CONFIG = (
-        osp.join(get_package_share_directory("vehicle"), "config", "wheel.yaml"),
+        osp.join(get_package_share_directory("sample_vehicle"), "config", "wheel.yaml"),
     )
     wheel_odometry_publisher = Node(
         package=PACKAGE_NAME,

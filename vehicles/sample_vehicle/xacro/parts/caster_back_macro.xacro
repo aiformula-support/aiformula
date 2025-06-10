@@ -14,7 +14,7 @@
   <xacro:macro name="caster_back_link_macro"
                params="caster_back
                        x y z roll pitch yaw">
-    <xacro:property name="MESH_FILE" value="package://vehicle/xacro/meshes/tire.dae"/>
+    <xacro:property name="MESH_FILE" value="package://sample_vehicle/xacro/meshes/tire.dae"/>
     <xacro:property name="SCALE" value="0.10"/>
     <link name="${caster_back}_link">
       <visual>

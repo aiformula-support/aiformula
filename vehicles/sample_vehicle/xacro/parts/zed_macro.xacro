@@ -3,10 +3,10 @@
 
   <xacro:macro name="zed_macro"
                params="camera parent">
-    <xacro:property name="ZED_PARAM_YAML_PATH" value="$(find vehicle)/config/zedx/extrinsic/extrinsic.yaml" />
+    <xacro:property name="ZED_PARAM_YAML_PATH" value="$(find sample_vehicle)/config/zedx/extrinsic/extrinsic.yaml" />
     <xacro:property name="POSITION" value="${load_yaml(ZED_PARAM_YAML_PATH)['position']}" />
     <xacro:property name="ORIENTATION" value="${load_yaml(ZED_PARAM_YAML_PATH)['orientation']}" />
-    <xacro:property name="MESH_FILE" value="package://vehicle/xacro/meshes/zedx.stl"/>
+    <xacro:property name="MESH_FILE" value="package://sample_vehicle/xacro/meshes/zedx.stl"/>
     <xacro:property name="SIZE" value="${dict(x=0.035, y=0.16, z=0.03)}"/>
     <xacro:property name="BASE_LINE" value="0.120005"/>
 

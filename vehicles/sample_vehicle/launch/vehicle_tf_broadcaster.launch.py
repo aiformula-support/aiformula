@@ -6,7 +6,7 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
-from vehicle.vehicle_util import convert_xacro_to_urdf
+from sample_vehicle.vehicle_util import convert_xacro_to_urdf
 
 PACKAGE_NAME = "sample_vehicle"
 PACKAGE_DIR = get_package_share_directory(PACKAGE_NAME)

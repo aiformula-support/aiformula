@@ -9,7 +9,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 from common_python.launch_util import get_frame_ids_and_topic_names
-from vehicle.vehicle_util import get_zed_intrinsic_param_path
+from sample_vehicle.vehicle_util import get_zed_intrinsic_param_path
 
 
 def create_lane_line_publisher_node(context: LaunchContext) -> Tuple[Node]:
