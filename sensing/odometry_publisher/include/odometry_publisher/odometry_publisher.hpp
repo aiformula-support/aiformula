@@ -30,6 +30,8 @@ protected:
     void broadcastTf(const nav_msgs::msg::Odometry& odom);
 
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odometry_pub_;
+    geometry_msgs::msg::Point pos_;
+    geometry_msgs::msg::Vector3 vehicle_linear_velocity_;
     double yaw_angle_;
     double yaw_rate_;
 
@@ -43,8 +45,6 @@ private:
 
     std::unique_ptr<tf2_ros::TransformBroadcaster> odometry_br_;
     double prev_time_;
-    geometry_msgs::msg::Point pos_;
-    geometry_msgs::msg::Vector3 vehicle_linear_velocity_;
 };
 
 }  // namespace aiformula

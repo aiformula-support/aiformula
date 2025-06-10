@@ -1,0 +1,13 @@
+/**:
+  ros__parameters:
+    controller_parameters:
+      seek_gain: -0.2 # -0.2
+      seek_amp: 0.08 # 0.08
+      curvature_limit: 0.2
+      feedback_gain: 0.9
+      sin_period: 0.08 #[s]
+    
+    lowpassfilter: # ex) Fc = 0.01 Hz -> A = 0.9937, B = 0.01, C = 0.6283
+      A: 0.9937
+      B: 0.01
+      C: 0.6283

@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    object_risk_potential:
+      variance_x: 0.8
+      variance_y: 0.8
+      correlation_coefficient: 0.0
+      gain: 100.

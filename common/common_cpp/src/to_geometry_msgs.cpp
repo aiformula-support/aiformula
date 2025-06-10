@@ -16,6 +16,15 @@ geometry_msgs::msg::Quaternion toQuaternionMsg(const double& roll, const double&
     return tf2::toMsg(q);
 }
 
+geometry_msgs::msg::Pose toPoseMsg(const tf2::Vector3& pos, const tf2::Vector3& rot) {
+    geometry_msgs::msg::Pose pose;
+    pose.position = toPointMsg(pos.x(), pos.y(), pos.z());
+    pose.orientation = toQuaternionMsg(rot.x(), rot.y(), rot.z());
+    return pose;
+}
+
+geometry_msgs::msg::Pose toPoseMsg(const tf2::Vector3& pos) { return toPoseMsg(pos, tf2::Vector3(0.0, 0.0, 0.0)); }
+
 geometry_msgs::msg::Vector3 toVector3Msg(const double& x, const double& y, const double& z) {
     geometry_msgs::msg::Vector3 vec;
     vec.x = x;

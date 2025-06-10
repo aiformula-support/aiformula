@@ -9,7 +9,7 @@
 
   <depend>can_msgs</depend>
   <depend>common_python</depend>
-  <depend>vehicle</depend>
+  <depend>sample_vehicle</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

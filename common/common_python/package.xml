@@ -7,7 +7,7 @@
   <maintainer email="yuki_akimoto@jp.honda">Yuki Akimoto</maintainer>
   <license>TODO: License declaration</license>
 
-  <depend>launchers</depend>
+  <depend>sample_launchers</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

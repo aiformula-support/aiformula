@@ -1,0 +1,177 @@
+# sensing
+/aiformula_sensing/zed_node/left_image/undistorted:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/zed_node/right_image/undistorted:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/zed_node/imu:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+  
+/aiformula_sensing/vehicle_info:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/vectornav/imu:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/vectornav/gnss:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/gyro_odometry_publisher/odom:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/wheel_odometry_publisher/odom:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/gnss_odometry_publisher/odom:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_sensing/rear_potentiometer/yaw:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+# perception
+/aiformula_perception/object_road_detector/mask_image:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_perception/object_road_detector/rect:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_perception/object_publisher/object_info:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_perception/lane_line_publisher/annotated_mask_image:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_perception/lane_line_publisher/lane_lines/left:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_perception/lane_line_publisher/lane_lines/right:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_perception/lane_line_publisher/lane_lines/center:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+# control
+/aiformula_control/gamepad/joy:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/gamepad/cmd_vel:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/handle_controller/cmd_vel:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/handle_controller/cmd_vel/coasting:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/extremum_seeking_mpc/cmd_vel:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/twist_mux/cmd_vel:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/twist_mux/all/lock:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/twist_mux/handle_controller/lock:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/twist_mux/gamepad/lock:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_control/motor_controller/reference_signal:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+# visualization
+/aiformula_visualization/road_detector/annotated_mask_image:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+
+/aiformula_visualization/zed/left_image/compressed:
+  depth: 2
+  durability: volatile
+  history: keep_last
+  reliability: best_effort

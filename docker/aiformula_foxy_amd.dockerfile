@@ -14,8 +14,8 @@ RUN echo 'Asia/Tokyo' > /etc/timezone && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # setup environment
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # locale
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive && \
@@ -80,6 +80,12 @@ RUN pip3 install xacro
 # install pytorch
 RUN pip3 install torch torchvision
 
+# install other necessary packages
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive && \
+    apt-get install -q -y --no-install-recommends \
+        libgtk-3-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # add user
 ARG USER_NAME=aiformula
 ARG GROUP_NAME=aiformula
@@ -115,6 +121,6 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ${HOME}/.bashrc && \
 
 RUN echo "alias cb='cd ${HOME}/workspace/ros && colcon build --symlink-install --packages-up-to'" >> ${HOME}/.bash_aliases && \
     echo "alias cbcc='cd ${HOME}/workspace/ros && colcon build --cmake-clean-cache --symlink-install --packages-up-to'" >> ${HOME}/.bash_aliases && \
-    echo "alias cc='rm -rf ${HOME}/workspace/ros/build ${HOME}/workspace/ros/install ${HOME}/workspace/ros/log && unset AMENT_PREFIX_PATH && unset CMAKE_PREFIX_PATH'" >> ${HOME}/.bash_aliases
+    echo "alias cc='rm -rf ${HOME}/workspace/ros/build ${HOME}/workspace/ros/install ${HOME}/workspace/ros/log && unset AMENT_PREFIX_PATH && unset CMAKE_PREFIX_PATH && source /opt/ros/${ROS_DISTRO}/setup.bash'" >> ${HOME}/.bash_aliases
 
 CMD ["bash"]
