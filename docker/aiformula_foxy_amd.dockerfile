@@ -117,7 +117,7 @@ RUN git clone https://github.com/autowarefoundation/ros2_socketcan.git ${HOME}/w
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ${HOME}/.bashrc && \
     echo "source ${HOME}/workspace/ros/install/setup.bash" >> ${HOME}/.bashrc && \
-    echo "export PATH=\${PATH}:${HOME}/workspace/ros/src/aiformula/launchers/shellscript" >> ${HOME}/.bashrc
+    echo "export PATH=\${PATH}:${HOME}/workspace/ros/src/aiformula/sample_launchers/shellscript" >> ${HOME}/.bashrc
 
 RUN echo "alias cb='cd ${HOME}/workspace/ros && colcon build --symlink-install --packages-up-to'" >> ${HOME}/.bash_aliases && \
     echo "alias cbcc='cd ${HOME}/workspace/ros && colcon build --cmake-clean-cache --symlink-install --packages-up-to'" >> ${HOME}/.bash_aliases && \
