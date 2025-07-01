@@ -15,7 +15,7 @@ Functions to be provided in this package:
 * planning
 
 ## Dependencies
-* ROS2 Foxy (Ubuntu 20.04)
+* ROS2 Humble (Ubuntu 22.04)
 * ZED SDK
 * [ZED ROS2 wrapper](https://github.com/stereolabs/zed-ros2-wrapper)
 * [VectorNav](https://github.com/dawonn/vectornav)
