@@ -20,6 +20,12 @@ Functions to be provided in this package:
 * [ZED ROS2 wrapper](https://github.com/stereolabs/zed-ros2-wrapper)
 * [VectorNav](https://github.com/dawonn/vectornav)
 * [ros2_socketcan](https://github.com/autowarefoundation/ros2_socketcan.git)
+
+## Open Source Projects Related to AI-Formula
+* [aiformula](https://github.com/aiformula-support/aiformula)
+* [aiformula_common](https://github.com/aiformula-support/aiformula_common)
+* [aiformula_pilot](https://github.com/aiformula-support/aiformula_pilot)
+
 ## Getting Started
 
 ### Installation
