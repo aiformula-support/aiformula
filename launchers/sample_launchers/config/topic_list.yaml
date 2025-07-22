@@ -35,6 +35,7 @@ control:
       normal: "/aiformula_control/handle_controller/cmd_vel"
       coasting: "/aiformula_control/handle_controller/cmd_vel/coasting"
     mpc: "/aiformula_control/extremum_seeking_mpc/cmd_vel"
+    emergency_stop_controller: "/aiformula_control/emergency_stop_controller/cmd_vel"
     multiplexed: "/aiformula_control/twist_mux/cmd_vel"
   twist_mux_lock:
     all: "/aiformula_control/twist_mux/all/lock"

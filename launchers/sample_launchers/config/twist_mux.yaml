@@ -8,6 +8,9 @@
 /**:
   ros__parameters:
     topics:
+      emergency_stop_controller:
+        timeout : 0.3  # [sec]
+        priority: 255
       handle_controller:
         timeout : 0.3  # [sec]
         priority: 250
