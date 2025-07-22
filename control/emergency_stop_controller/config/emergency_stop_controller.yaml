@@ -1,0 +1,3 @@
+/**:
+  ros__parameters:
+    publish_twist_timer_loop_duration: 100  # [msec] : The cycle for publishing twist topic.
