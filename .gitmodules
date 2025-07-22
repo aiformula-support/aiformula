@@ -11,3 +11,6 @@
 [submodule "perception/yolop/yolop"]
 	path = perception/yolop/yolop
 	url = https://github.com/hustvl/YOLOP.git
+[submodule "common"]
+	path = common
+	url = https://github.com/aiformula-support/aiformula_common.git
