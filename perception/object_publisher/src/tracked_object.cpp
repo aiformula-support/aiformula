@@ -31,7 +31,7 @@ void TrackedObject::printStaticMembers() {
                << formatter("initial_error_covariance_") << initial_error_covariance_.value() << "\n"
                << std::fixed << formatter("expiration_duration_") << expiration_duration_.value() << " [sec]\n"
                << std::string(70, '=') << "\n";
-    RCLCPP_INFO(node_ptr_.value()->get_logger(), "%s", log_stream.str().c_str());
+    RCLCPP_DEBUG(node_ptr_.value()->get_logger(), "%s", log_stream.str().c_str());
 }
 
 TrackedObject::TrackedObject(const int& id, const float& left_x, const float& left_y, const float& right_x,
