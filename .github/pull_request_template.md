@@ -13,7 +13,7 @@ PRの内容を説明して下さい。
 - [ ] 必要な変更のpush漏れが無い (`git status` や VSCode 等で確認)
 - [ ] 不必要な変更のpushが無い (`git status` や VSCode 等で確認)
 - [ ] `build`, `install`, `log` を消した状態からビルドが通る
-- [ ] 一括起動スクリプト `all_robot_nodes.launch.py` で，全てのノードが問題なく起動する
+- [ ] 一括起動スクリプト `all_nodes.launch.py` で，全てのノードが問題なく起動する
 
 
 ## 動作確認手順（レビュワー再現用）
@@ -22,7 +22,7 @@ PRの内容を説明して下さい。
 例:  
 - 一括起動スクリプトで実行
     ```sh
-    ros2 launch sample_launchers all_robot_nodes.launch.py
+    ros2 launch sample_launchers all_nodes.launch.py
     ```
 
 ## エビデンスの提示
