@@ -612,7 +612,7 @@
 
     <include>
       <pose>0.0 0.0 0.01 0.0 0.0 </pose>
-      <uri>model://ai_car1</uri>
+      <uri>model://ai_mobility_1</uri>
     </include>
 
   </world>
