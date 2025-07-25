@@ -1,4 +1,0 @@
-/**:
-  ros__parameters:
-    publish_timer_loop_duration: 0.01 #[sec]
-      
