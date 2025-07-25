@@ -1,11 +1,9 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from common_python.launch_util import get_frame_ids_and_topic_names
 
 
 def generate_launch_description():
     PACKAGE_NAME = "rear_potentiometer"
-    _, TOPIC_NAMES = get_frame_ids_and_topic_names()
 
     rear_potentiometer = Node(
         package=PACKAGE_NAME,
@@ -15,11 +13,13 @@ def generate_launch_description():
         output="screen",
         emulate_tty=True,
         remappings=[
-            ("pub_rear_wheel_yaw", TOPIC_NAMES["sensing"]["rear_potentiometer"]),
-            ("sub_can", TOPIC_NAMES["sensing"]["input_can_data"]),
+            ("pub_rear_wheel_yaw", "/aiformula_sensing/rear_potentiometer/yaw"),
+            ("sub_can", "/aiformula_sensing/vehicle_info"),
         ],
     )
 
-    return LaunchDescription([
-        rear_potentiometer,
-    ])
+    return LaunchDescription(
+        [
+            rear_potentiometer,
+        ]
+    )
