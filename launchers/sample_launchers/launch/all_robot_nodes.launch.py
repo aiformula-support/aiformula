@@ -76,6 +76,13 @@ def generate_launch_description():
                      "launch/gamepad_teleop.launch.py"),
         ),
     )
+    # --- Publish zero velocity if emergency stop is active --- #
+    emergency_stop_controller = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("emergency_stop_controller"),
+                     "launch/emergency_stop_controller.launch.py"),
+        ),
+    )
     # --- Multiplex velocities --- #
     twist_mux = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -151,6 +158,7 @@ def generate_launch_description():
         lane_line_publisher,
         gamepad_joy,
         gamepad_teleop,
+        emergency_stop_controller,
         twist_mux,
         motor_controller,
         can_receiver_and_sender,

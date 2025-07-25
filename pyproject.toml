@@ -1,0 +1,4 @@
+[tool.isort]
+profile = "black"
+known_first_party = ["common_python", "sample_vehicle"]
+default_section = "THIRDPARTY"
