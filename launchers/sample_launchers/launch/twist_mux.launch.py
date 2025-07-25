@@ -7,20 +7,18 @@ from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
-from common_python.launch_util import get_frame_ids_and_topic_names
-
 
 def generate_launch_description():
     PACKAGE_NAME = "twist_mux"
     LAUNCHERS_DIR = get_package_share_directory("sample_launchers")
-    FRAME_IDS, TOPIC_NAMES = get_frame_ids_and_topic_names()
 
     launch_args = (
-        DeclareLaunchArgument(
-            "log_level",
-            default_value="info",
-            description="Logger level (debug, info, warn, error, fatal)",
-        ),
+        # DeclareLaunchArgument(
+        #     "logger",
+        #     default_value="info",
+        #     choices=["debug", "info", "warn", "error", "fatal"],
+        #     description="Ros logger level",
+        # ),
         DeclareLaunchArgument(
             "use_rviz",
             default_value="false",
@@ -36,31 +34,29 @@ def generate_launch_description():
     ROS_PARAM_CONFIG = (osp.join(LAUNCHERS_DIR, "config", "twist_mux.yaml"),)
     twist_mux = Node(
         package=PACKAGE_NAME,
-        executable="twist_mux",
-        name="twist_mux",
+        executable=PACKAGE_NAME,
+        name=PACKAGE_NAME,
         namespace="/aiformula_control",
         output="screen",
         emulate_tty=True,
-        arguments=["--ros-args", "--log-level", LaunchConfiguration("log_level")],
+        # arguments=[
+        #     "--ros-args",
+        #     "--log-level",
+        #     ["aiformula_control.", PACKAGE_NAME, ":=", LaunchConfiguration("logger")],
+        # ],
         parameters=[
             *ROS_PARAM_CONFIG,
             {
-                "topics.emergency_stop_controller.topic": TOPIC_NAMES["control"]["speed_command"][
-                    "emergency_stop_controller"
-                ],
-                "topics.handle_controller.topic": TOPIC_NAMES["control"]["speed_command"]["handle_controller"][
-                    "normal"
-                ],
-                "topics.gamepad.topic": TOPIC_NAMES["control"]["speed_command"]["gamepad"],
-                "topics.mpc.topic": TOPIC_NAMES["control"]["speed_command"]["mpc"],
-                "topics.handle_controller_coasting.topic": TOPIC_NAMES["control"]["speed_command"]["handle_controller"][
-                    "coasting"
-                ],
-                "locks.gamepad.topic": TOPIC_NAMES["control"]["twist_mux_lock"]["gamepad"],
+                "topics.emergency_stop_controller.topic": "/aiformula_control/emergency_stop_controller/cmd_vel",
+                "topics.handle_controller.topic": "/aiformula_control/handle_controller/cmd_vel",
+                "topics.gamepad.topic": "/aiformula_control/gamepad/cmd_vel",
+                "topics.mpc.topic": "/aiformula_control/extremum_seeking_mpc/cmd_vel",
+                "topics.handle_controller_coasting.topic": "/aiformula_control/handle_controller/cmd_vel/coasting",
+                "locks.gamepad.topic": "/aiformula_control/twist_mux/gamepad/lock",
             },
         ],
         remappings=[
-            ("cmd_vel_out", TOPIC_NAMES["control"]["speed_command"]["multiplexed"]),
+            ("cmd_vel_out", "/aiformula_control/twist_mux/cmd_vel"),
         ],
     )
     twist_marker = Node(
@@ -70,9 +66,9 @@ def generate_launch_description():
         namespace="/aiformula_visualization",
         output="screen",
         emulate_tty=True,
-        parameters=[{"frame_id": FRAME_IDS["base_footprint"], "scale": 1.0, "vertical_position": 2.0}],
+        parameters=[{"frame_id": "base_footprint", "scale": 1.0, "vertical_position": 2.0}],
         remappings=[
-            ("twist", TOPIC_NAMES["control"]["speed_command"]["multiplexed"]),
+            ("twist", "/aiformula_control/twist_mux/cmd_vel"),
         ],
     )
     rviz2 = Node(
