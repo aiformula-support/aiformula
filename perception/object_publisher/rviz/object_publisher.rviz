@@ -7,6 +7,7 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /Odometry1/Shape1
+        - /Image1
         - /ObjectInfoMultiArray1
       Splitter Ratio: 0.2964684069156647
     Tree Height: 385
@@ -153,7 +154,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /aiformula_visualization/object_road_detector/annotated_mask_image
+        Value: /aiformula_visualization/object_road_detector/annotated_image
       Value: true
     - Class: ObjectInfoMultiArray
       Enabled: true
