@@ -40,9 +40,9 @@ void ObjectPublisher::getRosParams(InitParams& init_params) {
 void ObjectPublisher::initValues(InitParams& init_params) {
     // Subscriber & Publisher
     const int buffer_size = 10;
-    bbox_sub_ = this->create_subscription<aiformula_interfaces::msg::RectMultiArray>(
+    bbox_sub_ = this->create_subscription<aiformula_msgs::msg::RectMultiArray>(
         "sub_bbox", buffer_size, std::bind(&ObjectPublisher::bboxCallback, this, std::placeholders::_1));
-    object_pub_ = this->create_publisher<aiformula_interfaces::msg::ObjectInfoMultiArray>("pub_object", buffer_size);
+    object_pub_ = this->create_publisher<aiformula_msgs::msg::ObjectInfoMultiArray>("pub_object", buffer_size);
     if (debug_)
         unfilered_object_pub_ =
             this->create_publisher<geometry_msgs::msg::PoseArray>("pub_unfiltered_object", buffer_size);
@@ -75,11 +75,11 @@ void ObjectPublisher::printParam(const InitParams& init_params) const {
                << trans.z() << ") [m]\n"
                << formatter("rot") << "(" << rot.x() << ", " << rot.y() << ", " << rot.z() << ", " << rot.w() << ")\n"
                << std::string(70, '=') << "\n";
-    RCLCPP_INFO(this->get_logger(), "%s", log_stream.str().c_str());
+    RCLCPP_DEBUG(this->get_logger(), "%s", log_stream.str().c_str());
     TrackedObject::printStaticMembers();
 }
 
-void ObjectPublisher::bboxCallback(const aiformula_interfaces::msg::RectMultiArray::ConstSharedPtr msg) {
+void ObjectPublisher::bboxCallback(const aiformula_msgs::msg::RectMultiArray::ConstSharedPtr msg) {
     RCLCPP_INFO_ONCE(this->get_logger(), "Subscribe BBox Rect !");
     std_msgs::msg::Header header = msg->header;
     header.frame_id = vehicle_frame_id_;
@@ -107,7 +107,7 @@ void ObjectPublisher::bboxCallback(const aiformula_interfaces::msg::RectMultiArr
     if (debug_) unfilered_object_pub_->publish(unfiltered_object_msg);
 }
 
-bool ObjectPublisher::toPositionInVehicle(const aiformula_interfaces::msg::Rect& rect, tf2::Vector3& bottom_left_point,
+bool ObjectPublisher::toPositionInVehicle(const aiformula_msgs::msg::Rect& rect, tf2::Vector3& bottom_left_point,
                                           tf2::Vector3& bottom_right_point) const {
     const cv::Point2f bottom_left(rect.x, rect.y + rect.height);
     const cv::Point2f bottom_right(rect.x + rect.width, rect.y + rect.height);
@@ -152,7 +152,7 @@ void ObjectPublisher::deleteExpiredObjects(const double& current_time) {
 }
 
 void ObjectPublisher::publishObjectInfo(const std_msgs::msg::Header& header, const tf2::Transform& vehicle_T_odom) {
-    aiformula_interfaces::msg::ObjectInfoMultiArray pub_msg;
+    aiformula_msgs::msg::ObjectInfoMultiArray pub_msg;
     pub_msg.header = header;
 
     for (const auto& tracked_object : tracked_objects_) {

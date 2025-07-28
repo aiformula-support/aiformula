@@ -1,19 +1,24 @@
 import os.path as osp
-from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument, ExecuteProcess
-from launch.substitutions import LaunchConfiguration
-from launch.conditions import IfCondition
+
 from ament_index_python.packages import get_package_share_directory
-from common_python.launch_util import get_frame_ids_and_topic_names
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
 
 def generate_launch_description():
     PACKAGE_NAME = "odometry_publisher"
     PACKAGE_DIR = get_package_share_directory(PACKAGE_NAME)
-    FRAME_IDS, TOPIC_NAMES = get_frame_ids_and_topic_names()
 
     launch_args = (
+        # DeclareLaunchArgument(
+        #     "logger",
+        #     default_value="info",
+        #     choices=["debug", "info", "warn", "error", "fatal"],
+        #     description="Ros logger level",
+        # ),
         DeclareLaunchArgument(
             "use_rosbag",
             default_value="false",
@@ -21,7 +26,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "rosbag_path",
-            default_value="~/data/aiformula/20240328_shiho_can_imu_mag_gnss/test_01",
+            default_value="/workspace/data/20240328_shiho_can_imu_mag_gnss/test_01",
             description="Path of rosbag to play",
         ),
         DeclareLaunchArgument(
@@ -36,9 +41,7 @@ def generate_launch_description():
         ),
     )
 
-    ROS_PARAM_CONFIG = (
-        osp.join(get_package_share_directory("sample_vehicle"), "config", "wheel.yaml"),
-    )
+    ROS_PARAM_CONFIG = (osp.join(get_package_share_directory("sample_vehicle"), "config", "wheel.yaml"),)
     wheel_odometry_publisher = Node(
         package=PACKAGE_NAME,
         executable="wheel_odometry_publisher",
@@ -46,14 +49,21 @@ def generate_launch_description():
         namespace="/aiformula_sensing",
         output="screen",
         emulate_tty=True,
-        parameters=[*ROS_PARAM_CONFIG,
-                    {
-                        "odom_frame_id": FRAME_IDS["odom"],
-                        "vehicle_frame_id": FRAME_IDS["base_footprint"] + "_wheel_odometry",
-                    }],
+        # arguments=[
+        #     "--ros-args",
+        #     "--log-level",
+        #     ["aiformula_sensing.wheel_odometry_publisher", ":=", LaunchConfiguration("logger")],
+        # ],
+        parameters=[
+            *ROS_PARAM_CONFIG,
+            {
+                "odom_frame_id": "odom",
+                "vehicle_frame_id": "base_footprint" + "_wheel_odometry",
+            },
+        ],
         remappings=[
-            ("sub_can", TOPIC_NAMES["sensing"]["input_can_data"]),
-            ("pub_odometry", TOPIC_NAMES["sensing"]["odometry"]["wheel"]),
+            ("sub_can", "/aiformula_sensing/vehicle_info"),
+            ("pub_odometry", "/aiformula_sensing/wheel_odometry_publisher/odom"),
         ],
     )
     ROS_PARAM_CONFIG = (
@@ -67,23 +77,30 @@ def generate_launch_description():
         namespace="/aiformula_sensing",
         output="screen",
         emulate_tty=True,
-        parameters=[*ROS_PARAM_CONFIG,
-                    {
-                        "odom_frame_id": FRAME_IDS["odom"],
-                        "vehicle_frame_id": FRAME_IDS["base_footprint"] + "_gyro_odometry",
-                    }],
+        # arguments=[
+        #     "--ros-args",
+        #     "--log-level",
+        #     ["aiformula_sensing.gyro_odometry_publisher", ":=", LaunchConfiguration("logger")],
+        # ],
+        parameters=[
+            *ROS_PARAM_CONFIG,
+            {
+                "odom_frame_id": "odom",
+                "vehicle_frame_id": "base_footprint" + "_gyro_odometry",
+            },
+        ],
         remappings=[
-            ("sub_imu", TOPIC_NAMES["sensing"]["zedx"]["imu"]),
-            ("sub_can", TOPIC_NAMES["sensing"]["input_can_data"]),
-            ("pub_odometry", TOPIC_NAMES["sensing"]["odometry"]["gyro"]),
+            ("sub_imu", "/aiformula_sensing/zed_node/imu"),
+            ("sub_can", "/aiformula_sensing/vehicle_info"),
+            ("pub_odometry", "/aiformula_sensing/gyro_odometry_publisher/odom"),
         ],
     )
     rosbag_play = ExecuteProcess(
         cmd=[
             "ros2 bag play",
             " --topics ",
-            TOPIC_NAMES["sensing"]["zedx"]["imu"],
-            TOPIC_NAMES["sensing"]["input_can_data"],
+            "/aiformula_sensing/zed_node/imu",
+            "/aiformula_sensing/vehicle_info",
             "/tf",
             "/tf_static",
             " -r ",
@@ -102,10 +119,12 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("use_rviz")),
     )
 
-    return LaunchDescription([
-        *launch_args,
-        wheel_odometry_publisher,
-        gyro_odometry_publisher,
-        rosbag_play,
-        rviz2,
-    ])
+    return LaunchDescription(
+        [
+            *launch_args,
+            wheel_odometry_publisher,
+            gyro_odometry_publisher,
+            rosbag_play,
+            rviz2,
+        ]
+    )

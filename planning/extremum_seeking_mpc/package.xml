@@ -9,7 +9,7 @@
 
   <depend>rclpy</depend>
   <depend>common_python</depend>
-  <depend>aiformula_interfaces</depend>
+  <depend>aiformula_msgs</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

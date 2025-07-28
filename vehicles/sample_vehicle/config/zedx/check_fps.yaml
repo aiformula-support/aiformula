@@ -1,4 +1,0 @@
-ZEDX_CAMERA:
-  RESOLUTION: ['HD1200', 'HD1080', 'SVGA']
-  GRAB_FPS_HD: ['60', '30', '15']
-  GRAB_FPS_SVGA: ['120', '60', '30', '15']

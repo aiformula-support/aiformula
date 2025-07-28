@@ -1,20 +1,17 @@
 import os.path as osp
 from typing import Tuple
 
-from launch import LaunchDescription, LaunchContext
-from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument, OpaqueFunction, ExecuteProcess
-from launch.substitutions import LaunchConfiguration
-from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
+from launch import LaunchContext, LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
-from common_python.launch_util import get_frame_ids_and_topic_names
 from sample_vehicle.vehicle_util import get_zed_intrinsic_param_path
-
 
 PACKAGE_NAME = "object_publisher"
 PACKAGE_DIR = get_package_share_directory(PACKAGE_NAME)
-FRAME_IDS, TOPIC_NAMES = get_frame_ids_and_topic_names()
 
 
 def create_object_publisher_node(context: LaunchContext) -> Tuple[Node]:
@@ -34,18 +31,25 @@ def create_object_publisher_node(context: LaunchContext) -> Tuple[Node]:
             namespace="/aiformula_perception",
             output="screen",
             emulate_tty=True,
-            parameters=[*ROS_PARAM_CONFIG,
-                        {
-                            "camera_name": LaunchConfiguration("camera_name"),
-                            "camera_frame_id": FRAME_IDS["zedx"]["left"],
-                            "vehicle_frame_id": FRAME_IDS["base_footprint"],
-                            "odom_frame_id": FRAME_IDS["odom"],
-                            "debug": LaunchConfiguration("debug"),
-                        }],
+            # arguments=[
+            #     "--ros-args",
+            #     "--log-level",
+            #     ["aiformula_perception.", PACKAGE_NAME, ":=", LaunchConfiguration("logger")],
+            # ],
+            parameters=[
+                *ROS_PARAM_CONFIG,
+                {
+                    "camera_name": LaunchConfiguration("camera_name"),
+                    "camera_frame_id": "zed_left_camera_optical_frame",
+                    "vehicle_frame_id": "base_footprint",
+                    "odom_frame_id": "odom",
+                    "debug": LaunchConfiguration("debug"),
+                },
+            ],
             remappings=[
-                ("sub_bbox", TOPIC_NAMES["perception"]["objects"]["bounding_box"]),
-                ("pub_object", TOPIC_NAMES["perception"]["objects"]["info"]),
-                ("pub_unfiltered_object", TOPIC_NAMES["visualization"]["unfiltered_object"]),
+                ("sub_bbox", "/aiformula_perception/object_road_detector/rect"),
+                ("pub_object", "/aiformula_perception/object_publisher/object_info"),
+                ("pub_unfiltered_object", "/aiformula_visualization/object_publisher/unfiltered_object"),
             ],
         ),
     )
@@ -53,6 +57,12 @@ def create_object_publisher_node(context: LaunchContext) -> Tuple[Node]:
 
 def generate_launch_description():
     launch_args = (
+        DeclareLaunchArgument(
+            "logger",
+            default_value="info",
+            choices=["debug", "info", "warn", "error", "fatal"],
+            description="Ros logger level",
+        ),
         DeclareLaunchArgument(
             "camera_name",
             default_value="zedx",
@@ -93,8 +103,8 @@ def generate_launch_description():
     object_publisher = OpaqueFunction(function=create_object_publisher_node)
 
     topics = [
-        TOPIC_NAMES["perception"]["objects"]["bounding_box"],
-        TOPIC_NAMES["visualization"]["annotated_image"],
+        "/aiformula_perception/object_road_detector/rect",
+        "/aiformula_visualization/object_road_detector/annotated_image",
         "/tf",
         "/tf_static",
     ]
@@ -116,9 +126,11 @@ def generate_launch_description():
         arguments=["-d", osp.join(PACKAGE_DIR, "rviz", PACKAGE_NAME + ".rviz")],
         condition=IfCondition(LaunchConfiguration("use_rviz")),
     )
-    return LaunchDescription([
-        *launch_args,
-        object_publisher,
-        rosbag_play,
-        rviz2,
-    ])
+    return LaunchDescription(
+        [
+            *launch_args,
+            object_publisher,
+            rosbag_play,
+            rviz2,
+        ]
+    )

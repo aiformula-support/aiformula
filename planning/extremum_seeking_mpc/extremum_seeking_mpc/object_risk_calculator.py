@@ -5,7 +5,7 @@ from typing import List
 
 from rclpy.node import Node
 
-from aiformula_interfaces.msg import ObjectInfoMultiArray
+from aiformula_msgs.msg import ObjectInfoMultiArray
 from common_python.get_ros_parameter import get_ros_parameter
 
 

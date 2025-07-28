@@ -1,8 +1,8 @@
 # Object Publisher
 
 ## Overview
-- This package subscribes to `aiformula_interfaces::msg::RectMultiArray`, converts the detected objects into the odom coordinate system, and applies a Kalman filter to track them while reducing detection instability.
-- The filtered objects are then published as `aiformula_interfaces::msg::ObjectInfoMultiArray`.
+- This package subscribes to `aiformula_msgs::msg::RectMultiArray`, converts the detected objects into the odom coordinate system, and applies a Kalman filter to track them while reducing detection instability.
+- The filtered objects are then published as `aiformula_msgs::msg::ObjectInfoMultiArray`.
 
 ## Features
 - Kalman Filtering:Smooths object detection and reduces noise.
