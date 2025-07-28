@@ -8,7 +8,7 @@
   <license>TODO: License declaration</license>
 
   <depend>common_python</depend>
-  <depend>aiformula_interfaces</depend>
+  <depend>aiformula_msgs</depend>
 
   <export>
     <build_type>ament_python</build_type>

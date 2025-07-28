@@ -5,7 +5,7 @@ import torch
 
 from yolop.lib.core.general import scale_coords
 
-from aiformula_interfaces.msg import Rect
+from aiformula_msgs.msg import Rect
 
 
 def to_rect(object_pose: torch.Tensor) -> Rect:
