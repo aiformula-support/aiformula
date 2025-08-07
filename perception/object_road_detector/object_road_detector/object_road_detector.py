@@ -17,7 +17,7 @@ from yolop.lib.models import get_net
 from yolop.lib.utils import letterbox_for_img
 from yolop.lib.utils.utils import select_device
 
-from aiformula_interfaces.msg import RectMultiArray
+from aiformula_msgs.msg import RectMultiArray
 from common_python.get_ros_parameter import get_ros_parameter
 from .object_road_detector_util import to_rect, draw_lane_lines, draw_bounding_boxes
 

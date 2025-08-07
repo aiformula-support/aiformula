@@ -16,7 +16,6 @@
   <depend>can_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>common_cpp</depend>
-  <depend>common_python</depend>
   <depend>sample_vehicle</depend>
   
   <test_depend>ament_lint_auto</test_depend>

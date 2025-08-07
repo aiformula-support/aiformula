@@ -19,6 +19,7 @@
   <depend>Eigen3</depend>
   <depend>OpenCV</depend>
   <depend>common_cpp</depend>
+  <depend>sample_vehicle</depend>
   
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

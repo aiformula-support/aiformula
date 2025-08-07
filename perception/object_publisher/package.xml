@@ -13,9 +13,8 @@
   <depend>visualization_msgs</depend>
   <depend>OpenCV</depend>
   <depend>common_cpp</depend>
-  <depend>common_python</depend>
   <depend>sample_vehicle</depend>
-  <depend>aiformula_interfaces</depend>
+  <depend>aiformula_msgs</depend>
   <depend>rviz_aiformula_plugins</depend>
 
   <test_depend>ament_lint_auto</test_depend>

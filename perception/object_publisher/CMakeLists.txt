@@ -7,7 +7,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(common_cpp REQUIRED)
-find_package(aiformula_interfaces REQUIRED)
+find_package(aiformula_msgs REQUIRED)
 
 file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_executable(${PROJECT_NAME}
@@ -25,7 +25,7 @@ ament_target_dependencies(${PROJECT_NAME}
     visualization_msgs
     OpenCV
     common_cpp
-    aiformula_interfaces
+    aiformula_msgs
 )
 install(TARGETS ${PROJECT_NAME}
     DESTINATION lib/${PROJECT_NAME}
