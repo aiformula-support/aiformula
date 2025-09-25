@@ -5,7 +5,8 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction, SetEnvironmentVariable
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, TextSubstitution
-from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
 from common_python.launch_util import check_zedx_available_fps
 
@@ -14,31 +15,38 @@ def get_zed_node(context):
     grab_resolution_val = LaunchConfiguration("grab_resolution").perform(context)
     grab_frame_rate_val = LaunchConfiguration("grab_frame_rate").perform(context)
     is_valid_fps = check_zedx_available_fps(grab_resolution_val, grab_frame_rate_val)
-    return (
-        # ZED Wrapper node
-        Node(
-            package="zed_wrapper",
+    
+    # ComposableNode
+    zed_wrapper_component = ComposableNode(
+        package="zed_components",
+        plugin="stereolabs::ZedCamera",
+        name="zed_node",
+        parameters=[
+            LaunchConfiguration("config_common_path"),
+            LaunchConfiguration("config_camera_path"),
+            {
+                "use_sim_time": LaunchConfiguration("use_sim_time"),
+                "general.grab_resolution": LaunchConfiguration("grab_resolution"),
+                "general.grab_frame_rate": int(grab_frame_rate_val),
+            },
+        ],
+        remappings=[
+            ("~/left/image_rect_color", "/aiformula_sensing/zed_node/left_image/undistorted"),
+            ("~/right/image_rect_color", "/aiformula_sensing/zed_node/right_image/undistorted"),
+            ("~/imu/data", "/aiformula_sensing/zed_node/imu"),
+        ],
+    )
+
+    return(
+        # Component Container
+        ComposableNodeContainer(
+            name="zed_container",
             namespace="/aiformula_sensing",
-            executable="zed_wrapper",
-            name="zed_node",
+            package="rclcpp_components",
+            executable="component_container", 
+            composable_node_descriptions=[zed_wrapper_component],
             output="screen",
             condition=IfCondition(str(is_valid_fps)),
-            parameters=[
-                # YAML files
-                LaunchConfiguration("config_common_path"),  # Common parameters
-                LaunchConfiguration("config_camera_path"),  # Camera related parameters
-                # Overriding
-                {
-                    "use_sim_time": LaunchConfiguration("use_sim_time"),
-                    "general.grab_resolution": LaunchConfiguration("grab_resolution"),
-                    "general.grab_frame_rate": int(grab_frame_rate_val),
-                },
-            ],
-            remappings=[
-                ("~/left/image_rect_color", "/aiformula_sensing/zed_node/left_image/undistorted"),
-                ("~/right/image_rect_color", "/aiformula_sensing/zed_node/right_image/undistorted"),
-                ("~/imu/data", "/aiformula_sensing/zed_node/imu"),
-            ],
         ),
     )
 
