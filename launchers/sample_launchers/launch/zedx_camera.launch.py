@@ -14,8 +14,9 @@ from common_python.launch_util import check_zedx_available_fps
 def get_zed_node(context):
     grab_resolution_val = LaunchConfiguration("grab_resolution").perform(context)
     grab_frame_rate_val = LaunchConfiguration("grab_frame_rate").perform(context)
+    pub_downscale_factor_val = LaunchConfiguration("pub_downscale_factor").perform(context)
+    pub_frame_rate_val = LaunchConfiguration("pub_frame_rate").perform(context)
     is_valid_fps = check_zedx_available_fps(grab_resolution_val, grab_frame_rate_val)
-    
     # ComposableNode
     zed_wrapper_component = ComposableNode(
         package="zed_components",
@@ -28,6 +29,9 @@ def get_zed_node(context):
                 "use_sim_time": LaunchConfiguration("use_sim_time"),
                 "general.grab_resolution": LaunchConfiguration("grab_resolution"),
                 "general.grab_frame_rate": int(grab_frame_rate_val),
+                "general.pub_resolution": LaunchConfiguration("pub_resolution"),
+                "general.pub_downscale_factor": float(pub_downscale_factor_val),
+                "general.pub_frame_rate": float(pub_frame_rate_val),
             },
         ],
         remappings=[
@@ -63,6 +67,21 @@ def generate_launch_description():
             "grab_frame_rate",
             default_value=TextSubstitution(text="60"),
             description="grabbing rate (HD1200/HD1080: 60, 30, 15 - SVGA: 120, 60, 30, 15)",
+        ),
+        DeclareLaunchArgument(
+            "pub_resolution",
+            default_value=TextSubstitution(text="CUSTOM"),
+            description="The resolution used for output. 'NATIVE' to use the same `general.grab_resolution` - `CUSTOM` to apply the `general.pub_downscale_factor` downscale factory to reduce bandwidth in transmission",
+        ),
+        DeclareLaunchArgument(
+            "pub_downscale_factor",
+            default_value=TextSubstitution(text="3.0"),
+            description="rescale factor used to rescale image before publishing when 'pub_resolution' is 'CUSTOM'",
+        ),
+        DeclareLaunchArgument(
+            "pub_frame_rate",
+            default_value=TextSubstitution(text="15.0"),
+            description="publish frame rate frequency of publishing of visual images and depth images",
         ),
         DeclareLaunchArgument(
             "use_sim_time", default_value="false", description="Enable simulation time mode.", choices=["true", "false"]
