@@ -51,7 +51,7 @@ class PosePredictor:
             # calculate yaw
             rotation_angle = predicted_positions[horizon_idx].yaw
             if horizon_idx:
-                rotation_angle += predicted_positions[horizon_idx+1].yaw
+                rotation_angle += predicted_positions[horizon_idx-1].yaw
 
             # apply yaw angle to position
             predicted_positions_rotate_transformed[horizon_idx] = self.rotate_position(
