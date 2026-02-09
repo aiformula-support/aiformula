@@ -52,6 +52,7 @@ def launch_setup(context, *args, **kwargs):
                     LaunchConfiguration("pub_frame_rate").perform(context)
                 ),
                 "depth.depth_mode": LaunchConfiguration("depth_mode").perform(context),
+                "depth.depth_stabilization": LaunchConfiguration("depth_stabilization"),
                 "pos_tracking.publish_tf": LaunchConfiguration("publish_tf"),
             },
         ],
@@ -104,8 +105,13 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "depth_mode",
-            default_value="NONE",
+            default_value="NEURAL_LIGHT",
             description="Matches the ZED SDK setting: 'NONE', 'PERFORMANCE', 'QUALITY', 'ULTRA', 'NEURAL', 'NEURAL_LIGHT', 'NEURAL_PLUS'",
+        ),
+         DeclareLaunchArgument(
+            "depth_stabilization",
+            default_value=TextSubstitution(text="0"),
+            description="# Forces positional tracking to start if major than 0 - Range: [0,100]",
         ),
         DeclareLaunchArgument(
             "publish_tf",
