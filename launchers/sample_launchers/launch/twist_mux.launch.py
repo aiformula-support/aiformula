@@ -47,7 +47,6 @@ def generate_launch_description():
         parameters=[
             *ROS_PARAM_CONFIG,
             {
-                "topics.emergency_stop_controller.topic": "/aiformula_control/emergency_stop_controller/cmd_vel",
                 "topics.handle_controller.topic": "/aiformula_control/handle_controller/cmd_vel",
                 "topics.gamepad.topic": "/aiformula_control/gamepad/cmd_vel",
                 "topics.mpc.topic": "/aiformula_control/extremum_seeking_mpc/cmd_vel",

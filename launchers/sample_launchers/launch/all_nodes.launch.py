@@ -80,6 +80,18 @@ def generate_launch_description():
             "use_runtime_monitor": "false",
         }.items(),
     )
+    motor_controller = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("motor_controller"),
+                     "launch/motor_controller.launch.py"),
+        ),
+    )
+    can_receiver_and_sender = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            osp.join(get_package_share_directory("sample_launchers"),
+                     "launch/socket_can_bridge.launch.py"),
+        ),
+    )
     gyro_odometry_publisher = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             osp.join(get_package_share_directory("odometry_publisher"), "launch/gyro_odometry_publisher.launch.py"),
@@ -128,6 +140,8 @@ def generate_launch_description():
             gamepad_joy,
             gamepad_teleop,
             twist_mux,
+            motor_controller,
+            can_receiver_and_sender,
             gyro_odometry_publisher,
             rear_potentiometer,
             image_compressor,
