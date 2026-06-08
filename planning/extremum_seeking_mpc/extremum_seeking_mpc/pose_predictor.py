@@ -13,7 +13,7 @@ class PosePredictor:
     def __init__(self, node: Node, horizon_times: List[float], seek_y_positions: np.ndarray, buffer_size: int):
         self.init_parameters(node)
         self.init_connections(node, buffer_size)
-        self.ego_current_velocity = None
+        self.ego_current_velocity = Velocity(linear=0., angular=0.)
         self.horizon_durations = np.diff(horizon_times, prepend=0)
         self.horizon_length = len(horizon_times)
         self.seek_y_positions = seek_y_positions
