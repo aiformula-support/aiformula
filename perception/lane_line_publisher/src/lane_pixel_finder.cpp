@@ -12,13 +12,15 @@ void LanePixelFinder::findLanePixels(const cv::Mat& binary_mask, LaneLines& lane
 }
 
 cv::Mat LanePixelFinder::visualizeLanePixels(const cv::Mat& binary_mask, const LaneLines& lane_lines) const {
-    static const uchar GRAY = 127;
     static const cv::Vec3b BLUE(255, 127, 0);
     static const cv::Vec3b GREEN(127, 255, 0);
     static const int MARKER_SIZE = 2;
 
+    // Accept both 0/1 (legacy Python detector) and 0/255 (TensorRT detector / RViz-friendly) masks.
+    cv::Mat gray;
+    cv::threshold(binary_mask, gray, 0, 127, cv::THRESH_BINARY);
     cv::Mat visualization;
-    cv::cvtColor(binary_mask * GRAY, visualization, cv::COLOR_GRAY2BGR);
+    cv::cvtColor(gray, visualization, cv::COLOR_GRAY2BGR);
 
     for (const auto& pixel : lane_lines.left.pixels)
         cv::drawMarker(visualization, pixel, GREEN, cv::MARKER_SQUARE, MARKER_SIZE);

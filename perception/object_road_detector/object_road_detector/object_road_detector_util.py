@@ -1,14 +1,11 @@
 from typing import Tuple
 import cv2
 import numpy as np
-import torch
-
-from yolop.lib.core.general import scale_coords
 
 from aiformula_msgs.msg import Rect
 
 
-def to_rect(object_pose: torch.Tensor) -> Rect:
+def to_rect(object_pose: np.ndarray) -> Rect:
     rect = Rect()
     x_min, y_min, x_max, y_max = object_pose
     rect.x = float(x_min)
@@ -27,14 +24,13 @@ def draw_lane_lines(image: np.ndarray, ll_seg_mask: np.ndarray, alpha: float = 0
     image[mask] = cv2.addWeighted(image[mask], 1.0 - alpha, overlay[mask], alpha, gamma=0.0)
 
 
-def draw_bounding_boxes(image: np.ndarray, objects: torch.Tensor, input_image_shape: torch.Size) -> None:   # draw bbox with opencv
-    bboxes_coords = scale_coords(input_image_shape, objects[:, :4], image.shape).round()
+def draw_bounding_boxes(image: np.ndarray, bboxes_coords: np.ndarray) -> None:   # draw bbox with opencv
     for bboxes_coord in bboxes_coords:
         plot_one_box(image, bboxes_coord)
 
 
 # Plots one bounding box on image
-def plot_one_box(image: np.ndarray, bbox_coords: torch.Tensor, color: Tuple[int, int, int] = (255, 0, 0)) -> None:
+def plot_one_box(image: np.ndarray, bbox_coords: np.ndarray, color: Tuple[int, int, int] = (255, 0, 0)) -> None:
     top_left = (int(bbox_coords[0]), int(bbox_coords[1]))
     bottom_right = (int(bbox_coords[2]), int(bbox_coords[3]))
     thickness = max(int(image.shape[0] * 0.002), 1)

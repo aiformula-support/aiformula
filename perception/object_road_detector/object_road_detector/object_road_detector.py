@@ -1,4 +1,3 @@
-from copy import deepcopy
 from typing import Tuple
 
 from cv_bridge import CvBridge, CvBridgeError
@@ -8,6 +7,7 @@ import torchvision.transforms as transforms
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header
 
@@ -20,6 +20,7 @@ from yolop.lib.utils.utils import select_device
 from aiformula_msgs.msg import RectMultiArray
 from common_python.get_ros_parameter import get_ros_parameter
 from .object_road_detector_util import to_rect, draw_lane_lines, draw_bounding_boxes
+from .stage_profiler import StageProfiler
 
 
 class ObjectRoadDetector(Node):
@@ -29,12 +30,19 @@ class ObjectRoadDetector(Node):
         device, path_to_weights, mean, stdev = self.get_params()
         self.init_detector(device, path_to_weights, mean, stdev)
         self.cv_bridge = CvBridge()
+        self.profiler = StageProfiler(
+            self, enabled=self.enable_profiling, report_interval_sec=self.profiling_interval,
+            cuda_sync=self.profiling_cuda_sync)
         buffer_size = 10
+        # Only the newest frame is worth inferring on: a reliable, deep queue lets the middleware
+        # hand over frames faster than they can be processed and the output lags behind reality.
         self.image_sub = self.create_subscription(
-            Image, 'sub_image', self.image_callback, buffer_size)
-        self.annotated_image_pub = self.create_publisher(Image, 'pub_annotated_image', buffer_size)
+            Image, 'sub_image', self.image_callback,
+            QoSProfile(depth=1, reliability=QoSReliabilityPolicy.BEST_EFFORT))
         self.lane_mask_image_pub = self.create_publisher(Image, 'pub_mask_image', buffer_size)
         self.rects_pub = self.create_publisher(RectMultiArray, 'pub_bbox', buffer_size)
+        self.annotated_image_pub = self.create_publisher(
+            Image, 'pub_annotated_image', buffer_size) if self.debug else None
 
     def get_params(self) -> Tuple[str, str, float, float]:
         device = str(get_ros_parameter(self, 'use_device'))
@@ -43,6 +51,10 @@ class ObjectRoadDetector(Node):
         stdev = get_ros_parameter(self, 'normalization.standard_deviation')
         self.confidence_threshold = get_ros_parameter(self, 'confidence_threshold')
         self.iou_threshold = get_ros_parameter(self, 'iou_threshold')
+        self.debug = get_ros_parameter(self, 'debug')
+        self.enable_profiling = get_ros_parameter(self, 'profiling.enable')
+        self.profiling_interval = get_ros_parameter(self, 'profiling.report_interval_sec')
+        self.profiling_cuda_sync = get_ros_parameter(self, 'profiling.cuda_sync')
         return device, path_to_weights, mean, stdev
 
     def init_detector(self, device: str, path_to_weights: str, mean: float, stdev: float) -> None:
@@ -65,39 +77,54 @@ class ObjectRoadDetector(Node):
         self.detector.eval()
 
     def image_callback(self, msg: Image) -> None:
-        try:
-            undistorted_image = self.cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
-        except CvBridgeError as e:
-            self.get_logger().warning(f"CvBridgeError occurred: {str(e)}")
-        # Padded resize
-        padded_image, (ratio_to_padded, _), (pad_x_half, pad_y_half) = letterbox_for_img(undistorted_image,
-                                                                                         new_shape=640, auto=True)  # ratio_to_padded (width, height)
-        normalized_tensor = self.transform(padded_image).to(self.use_device)
-        # Input image
-        input_image = normalized_tensor.half() if self.use_half_precision else normalized_tensor.float()  # uint8 to fp16/32
-        input_image = input_image.unsqueeze(0)
-        input_image_size = input_image.shape[2:]
-        # Inference
-        with torch.no_grad():
-            object_raw_outputs, _, ll_seg_raw_outputs = self.detector(input_image)  # ll_seg : lane line segmentation
-        ll_seg_mask = self.decode_lane_line_output(
-            ll_seg_raw_outputs, *input_image_size, ratio_to_padded, pad_x_half, pad_y_half)
-        bbox_detections = self.decode_object_output(object_raw_outputs)
-        # Publish
-        self.publish_lane_line(ll_seg_mask, msg.header)
-        self.publish_rects(input_image_size, undistorted_image.shape, deepcopy(bbox_detections), msg.header)
-        self.publish_result_image(undistorted_image, input_image_size, ll_seg_mask,
-                                  bbox_detections, msg.header)
+        with self.profiler.stage('cv_bridge'):
+            try:
+                undistorted_image = self.cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
+            except CvBridgeError as e:
+                self.get_logger().warning(f"CvBridgeError occurred: {str(e)}")
+                return
+        with self.profiler.stage('letterbox'):
+            # Padded resize
+            padded_image, _, (pad_x_half, pad_y_half) = letterbox_for_img(undistorted_image,
+                                                                          new_shape=640, auto=True)
+        with self.profiler.stage('normalize_h2d'):
+            normalized_tensor = self.transform(padded_image).to(self.use_device)
+            # Input image
+            input_image = normalized_tensor.half() if self.use_half_precision else normalized_tensor.float()  # uint8 to fp16/32
+            input_image = input_image.unsqueeze(0)
+            input_image_size = input_image.shape[2:]
+        with self.profiler.stage('inference'):
+            with torch.no_grad():
+                object_raw_outputs, _, ll_seg_raw_outputs = self.detector(input_image)  # ll_seg : lane line segmentation
+        with self.profiler.stage('decode_lane_line'):
+            ll_seg_mask = self.decode_lane_line_output(
+                ll_seg_raw_outputs, *input_image_size, undistorted_image.shape[:2], pad_x_half, pad_y_half)
+        with self.profiler.stage('nms'):
+            bbox_detections = self.decode_object_output(object_raw_outputs)
+        with self.profiler.stage('scale_coords'):
+            # `scale_coords` rescales in place, so the boxes are mapped back to the source image once
+            # and the result is shared by the message and the visualization.
+            bbox_coords = scale_coords(
+                input_image_size, bbox_detections[:, :4], undistorted_image.shape).round().cpu().numpy()
+        with self.profiler.stage('publish'):
+            self.publish_lane_line(ll_seg_mask, msg.header)
+            self.publish_rects(bbox_coords, msg.header)
+        with self.profiler.stage('annotate_publish'):
+            self.publish_result_image(undistorted_image, ll_seg_mask, bbox_coords, msg.header)
+        self.profiler.frame_done()
 
-    def decode_lane_line_output(self, ll_seg_raw: torch.Tensor, height: int, width: int, ratio_to_padded: float, pad_x_half: np.float64, pad_y_half: np.float64) -> np.ndarray:
+    def decode_lane_line_output(self, ll_seg_raw: torch.Tensor, height: int, width: int,
+                                target_size: Tuple[int, int], pad_x_half: np.float64,
+                                pad_y_half: np.float64) -> np.ndarray:
         ROUNDING_ADJUSTMENT = 0.1
         top, bottom = round(pad_y_half - ROUNDING_ADJUSTMENT), round(pad_y_half + ROUNDING_ADJUSTMENT)
         left, right = round(pad_x_half - ROUNDING_ADJUSTMENT), round(pad_x_half + ROUNDING_ADJUSTMENT)
         ll_predict = ll_seg_raw[:, :, top:(height-bottom), left:(width-right)]
-        ll_seg_mask_raw = torch.nn.functional.interpolate(
-            ll_predict, scale_factor=int(1.0/ratio_to_padded), mode='bilinear')
-        _, ll_seg_map = torch.max(ll_seg_mask_raw, dim=1)
-        ll_seg_mask = np.array(ll_seg_map.int().squeeze().cpu().numpy(), dtype=np.uint8)
+        # Resizing to the source image size directly keeps the mask aligned with the camera
+        # intrinsics for any downscale factor, including non-integer ones.
+        ll_seg_mask_raw = torch.nn.functional.interpolate(ll_predict, size=target_size, mode='bilinear')
+        ll_seg_map = ll_seg_mask_raw.argmax(dim=1)
+        ll_seg_mask = np.array(ll_seg_map.squeeze().to(torch.uint8).cpu().numpy(), dtype=np.uint8)
         return ll_seg_mask
 
     def decode_object_output(self, object_raw_outputs: Tuple[torch.Tensor, list]) -> torch.Tensor:
@@ -117,18 +144,20 @@ class ObjectRoadDetector(Node):
         ll_seg_mask_msg.header = header
         self.lane_mask_image_pub.publish(ll_seg_mask_msg)
 
-    def publish_rects(self, input_image_shape: torch.Size, undistorted_image_shape: Tuple[int, int, int], bbox_detections: torch.Tensor, header: Header) -> None:
-        # Extract the bounding box coordinates: top-left, bottom-right
-        bbox_coords = scale_coords(input_image_shape, bbox_detections[:, :4], undistorted_image_shape).round()
+    def publish_rects(self, bbox_coords: np.ndarray, header: Header) -> None:
+        # Bounding box coordinates in the source image: top-left, bottom-right
         bbox_msg = RectMultiArray()
         for bbox_coord in bbox_coords:
             bbox_msg.rects.append(to_rect(bbox_coord))
         bbox_msg.header = header
         self.rects_pub.publish(bbox_msg)
 
-    def publish_result_image(self, undistorted_image: np.ndarray, input_image_shape: torch.Size, ll_seg_mask: np.ndarray, bbox_detections: torch.Tensor, header: Header) -> None:
+    def publish_result_image(self, undistorted_image: np.ndarray, ll_seg_mask: np.ndarray,
+                             bbox_coords: np.ndarray, header: Header) -> None:
+        if self.annotated_image_pub is None:
+            return
         draw_lane_lines(undistorted_image, ll_seg_mask)
-        draw_bounding_boxes(undistorted_image, bbox_detections, input_image_shape)
+        draw_bounding_boxes(undistorted_image, bbox_coords)
         annotated_image_msg = self.cv_bridge.cv2_to_imgmsg(undistorted_image, 'bgr8')
         annotated_image_msg.header = header
         self.annotated_image_pub.publish(annotated_image_msg)

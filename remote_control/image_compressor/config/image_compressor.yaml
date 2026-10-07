@@ -1,3 +1,4 @@
 /**:
   ros__parameters:
     jpeg_quality: 30  # from 0 to 100 (the higher is the better).
+    max_output_width: 960  # downscale wider images before encoding, 0 to keep the source size.

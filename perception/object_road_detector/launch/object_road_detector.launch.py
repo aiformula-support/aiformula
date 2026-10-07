@@ -24,6 +24,18 @@ def generate_launch_description():
             default_value="0",
             description="cuda device, i.e. 0 or cpu",
         ),
+        DeclareLaunchArgument(
+            "debug",
+            default_value="false",
+            description="If true, publish the annotated source image.",
+            choices=["true", "false"],
+        ),
+        DeclareLaunchArgument(
+            "enable_profiling",
+            default_value="false",
+            description="If true, log a periodic per-stage latency breakdown of the pipeline.",
+            choices=["true", "false"],
+        ),
     )
 
     object_road_detector = Node(
@@ -38,6 +50,8 @@ def generate_launch_description():
             {
                 "weight_path": LaunchConfiguration("weight_path"),
                 "use_device": LaunchConfiguration("use_device"),
+                "debug": LaunchConfiguration("debug"),
+                "profiling.enable": LaunchConfiguration("enable_profiling"),
             },
         ],
         remappings=[

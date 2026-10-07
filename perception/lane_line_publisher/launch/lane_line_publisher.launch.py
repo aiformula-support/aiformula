@@ -76,7 +76,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "camera_resolution",
-            default_value="nHD",
+            default_value="HD720",
             description="camera image resolution",
         ),
         DeclareLaunchArgument(

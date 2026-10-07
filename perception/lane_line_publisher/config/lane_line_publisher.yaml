@@ -9,6 +9,9 @@
         ymax: 25.0
       spacing: 1.0      # spacing between published lane line points [m]
     
+    # Both thresholds are in pixels, so they describe a fixed physical size only at one mask
+    # resolution. These values are for the 1280x720 masks; scale them linearly (and the area
+    # quadratically) if the ZED publish resolution changes.
     lane_pixel_finder:
-      min_area: 100     # minimum connected component area for mask noise removal [pix^2]
-      tolerance: 10     # tolerance to relax lane pixel search bounds [pix]
+      min_area: 400     # minimum connected component area for mask noise removal [pix^2]
+      tolerance: 20     # tolerance to relax lane pixel search bounds [pix]

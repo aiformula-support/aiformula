@@ -1,0 +1,22 @@
+/**:
+  ros__parameters:
+    # Built on-device by object_road_detector/tools/export_engine.py. Engines are GPU-specific
+    # and are not checked in; override this path if the file lives somewhere else.
+    engine_path: ""
+    # 'roi' crops a native-scale window matching the engine (default 1920x640), so objects keep
+    # the pixel size the detect-head anchors were trained for. On FHD this is a full-width band.
+    # 'letterbox' reproduces the original Python whole-frame downscale.
+    input_mode: roi
+    roi_x_offset: -1
+    roi_y_offset: -1
+    horizon_ratio: 0.55
+    swap_red_blue: false
+    # The engine already runs EfficientNMS_TRT at the training confidence; this is an extra gate.
+    score_threshold: 0.0
+    normalization:
+      mean: [0.485, 0.456, 0.406]
+      standard_deviation: [0.229, 0.224, 0.225]
+    debug: false  # if true, publish /aiformula_visualization/object_road_detector/annotated_image
+    profiling:
+      enable: false
+      report_interval_sec: 5.0

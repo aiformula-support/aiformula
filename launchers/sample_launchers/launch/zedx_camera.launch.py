@@ -53,6 +53,10 @@ def launch_setup(context, *args, **kwargs):
                 ),
                 "depth.depth_mode": LaunchConfiguration("depth_mode").perform(context),
                 "depth.depth_stabilization": LaunchConfiguration("depth_stabilization"),
+                "depth.point_cloud_res": LaunchConfiguration("point_cloud_res").perform(context),
+                "depth.point_cloud_freq": float(
+                    LaunchConfiguration("point_cloud_freq").perform(context)
+                ),
                 "pos_tracking.publish_tf": LaunchConfiguration("publish_tf"),
             },
         ],
@@ -61,12 +65,44 @@ def launch_setup(context, *args, **kwargs):
             ("~/right/image_rect_color", "/aiformula_sensing/zed_node/right_image/undistorted"),
             ("~/imu/data", "/aiformula_sensing/zed_node/imu"),
         ],
+        extra_arguments=[{"use_intra_process_comms": True}],
     )
     full_container_name = "/" + "aiformula_sensing" + "/" + "zed_container"
-    load_composable_node = LoadComposableNodes(
-        target_container=full_container_name, composable_node_descriptions=[zed_wrapper_component]
+    load_zed = LoadComposableNodes(
+        target_container=full_container_name,
+        composable_node_descriptions=[zed_wrapper_component],
     )
-    return_array.append(load_composable_node)
+    detector_component = ComposableNode(
+        package="object_road_detector_trt",
+        plugin="aiformula::ObjectRoadDetectorTrt",
+        name="object_road_detector",
+        namespace="aiformula_perception",
+        parameters=[
+            osp.join(
+                get_package_share_directory("object_road_detector_trt"),
+                "config",
+                "object_road_detector_trt.yaml",
+            ),
+            {
+                "engine_path": LaunchConfiguration("engine_path").perform(context),
+                "debug": LaunchConfiguration("detector_debug").perform(context) == "true",
+                "profiling.enable": LaunchConfiguration("detector_profiling").perform(context) == "true",
+            },
+        ],
+        remappings=[
+            ("sub_image", "/aiformula_sensing/zed_node/left_image/undistorted"),
+            ("pub_mask_image", "/aiformula_perception/object_road_detector/mask_image"),
+            ("pub_bbox", "/aiformula_perception/object_road_detector/rect"),
+            ("pub_annotated_image", "/aiformula_visualization/object_road_detector/annotated_image"),
+        ],
+        extra_arguments=[{"use_intra_process_comms": True}],
+    )
+    load_detector = LoadComposableNodes(
+        target_container=full_container_name,
+        composable_node_descriptions=[detector_component],
+        condition=IfCondition(LaunchConfiguration("enable_object_road_detector")),
+    )
+    return_array.extend([load_zed, load_detector])
     return return_array
 
 
@@ -95,13 +131,13 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             "pub_downscale_factor",
-            default_value=TextSubstitution(text="3.0"),
-            description="rescale factor used to rescale image before publishing when 'pub_resolution' is 'CUSTOM'",
+            default_value=TextSubstitution(text="1.5"),
+            description="rescale factor used to rescale image before publishing when 'pub_resolution' is 'CUSTOM'. 1.5 turns the HD1080 grab into a 1280x720 publish; use 'pub_resolution:=NATIVE' for full 1920x1080",
         ),
         DeclareLaunchArgument(
             "pub_frame_rate",
             default_value=TextSubstitution(text="15.0"),
-            description="publish frame rate frequency of publishing of visual images and depth images",
+            description="publish frame rate frequency of publishing of visual images and depth images. This is the hard ceiling on the perception output rate",
         ),
         DeclareLaunchArgument(
             "depth_mode",
@@ -112,6 +148,17 @@ def generate_launch_description():
             "depth_stabilization",
             default_value=TextSubstitution(text="0"),
             description="# Forces positional tracking to start if major than 0 - Range: [0,100]",
+        ),
+        DeclareLaunchArgument(
+            "point_cloud_res",
+            default_value="REDUCED",
+            description="Point cloud publish resolution. 'COMPACT' is the grab resolution, 'REDUCED' is half of it",
+            choices=["COMPACT", "REDUCED", "PUB", "FULL"],
+        ),
+        DeclareLaunchArgument(
+            "point_cloud_freq",
+            default_value=TextSubstitution(text="5.0"),
+            description="Point cloud publish rate [Hz]. Independent of 'pub_frame_rate' and must not exceed 'grab_frame_rate'",
         ),
         DeclareLaunchArgument(
             "publish_tf",
@@ -138,6 +185,33 @@ def generate_launch_description():
                 get_package_share_directory("zed_wrapper"), "config", "zedx.yaml"
             ),
             description="Path to the zedx YAML configuration file for the camera.",
+        ),
+        DeclareLaunchArgument(
+            "enable_object_road_detector",
+            default_value="true",
+            description="Load the TensorRT detector into the same container as the ZED wrapper",
+            choices=["true", "false"],
+        ),
+        DeclareLaunchArgument(
+            "engine_path",
+            default_value=osp.join(
+                get_package_share_directory("object_road_detector"),
+                "weights",
+                "shiho-v1-20250321-1920x640.engine",
+            ),
+            description="Path to the TensorRT engine produced by object_road_detector/tools/export_engine.py",
+        ),
+        DeclareLaunchArgument(
+            "detector_debug",
+            default_value="false",
+            description="If true, the detector publishes an annotated image",
+            choices=["true", "false"],
+        ),
+        DeclareLaunchArgument(
+            "detector_profiling",
+            default_value="false",
+            description="If true, the detector logs a periodic callback-rate summary",
+            choices=["true", "false"],
         ),
     )
     zed_node = OpaqueFunction(function=launch_setup)

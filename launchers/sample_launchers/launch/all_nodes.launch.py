@@ -12,7 +12,9 @@ def generate_launch_description():
     VEHICLE_NAME = "ai_mobility_1"
     CAMERA_NAME = "zedx"
     CAMERA_SN = "SN48311510"
-    CAMERA_RESOLUTION = "nHD"
+    # Must match what the ZED wrapper actually publishes, since it selects the intrinsics that the
+    # perception nodes use to turn pixels into vehicle-frame coordinates.
+    CAMERA_RESOLUTION = "HD720"
 
     launch_args = (
         DeclareLaunchArgument(
@@ -42,12 +44,7 @@ def generate_launch_description():
             osp.join(get_package_share_directory("sample_launchers"), "launch/zedx_camera.launch.py"),
         ),
     )
-    # --- Perception --- #
-    object_road_detector = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            osp.join(get_package_share_directory("object_road_detector"), "launch/object_road_detector.launch.py"),
-        ),
-    )
+    # object_road_detector_trt is loaded into zed_container by zedx_camera.launch.py
     lane_line_publisher = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             osp.join(get_package_share_directory("lane_line_publisher"), "launch/lane_line_publisher.launch.py"),
@@ -123,7 +120,6 @@ def generate_launch_description():
             *launch_args,
             vehicle_tf_broadcaster,
             zed_node,
-            object_road_detector,
             lane_line_publisher,
             gamepad_joy,
             gamepad_teleop,

@@ -30,6 +30,7 @@ private:
     void imageCallback(const sensor_msgs::msg::Image::SharedPtr msg) const;
 
     int jpeg_quality_;
+    int max_output_width_;
 
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
     rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr compressed_image_pub_;

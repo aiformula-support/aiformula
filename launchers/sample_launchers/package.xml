@@ -10,6 +10,8 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>common_python</depend>
+  <exec_depend>object_road_detector</exec_depend>
+  <exec_depend>object_road_detector_trt</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

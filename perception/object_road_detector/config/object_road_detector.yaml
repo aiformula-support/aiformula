@@ -8,3 +8,14 @@
           
     confidence_threshold: 0.80
     iou_threshold: 0.6
+
+    # Annotating and publishing the source image costs a full-resolution overlay plus a copy per
+    # frame, so it is only worth paying for while inspecting the detector.
+    debug: false
+
+    profiling:
+      enable: false
+      report_interval_sec: 5.0
+      # Required for a meaningful per-stage breakdown, since CUDA kernels are enqueued
+      # asynchronously and would otherwise be charged to the next synchronization point.
+      cuda_sync: true
